@@ -1,9 +1,6 @@
 import React from "react";
 import {useEffect, useState} from "react"; //might need to check syntax
 
-
-
-
 function NewReservation(){
 
     const initForm = {
@@ -23,18 +20,19 @@ function NewReservation(){
             ...formData,
             [target.name]:target.value
         })
+        
     };
 
     const formSubmitHandler = (event) => {
         event.preventDefault();
+        // might need to reformat the object
+        const data = JSON.stringify(formData);
         setFormData({...initForm});
     };
 /*TO Do */
-//form elements
-//form handlers
+
 //api calls
 //catch api errors, and display them on page.
- console.log(formData.reservation_date !== ""?formatReservationDate(formData):formData)
 
     return (
         <div>
