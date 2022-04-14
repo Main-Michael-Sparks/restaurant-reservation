@@ -1,5 +1,8 @@
 import React from "react";
 import {useEffect, useState} from "react"; //might need to check syntax
+import {useHistory} from "react-router-dom"
+import {createReservation} from "../../utils/api";
+import ErrorAlert from "../ErrorAlert";
 
 function NewReservation(){
 
@@ -12,8 +15,17 @@ function NewReservation(){
         people: "",
 
     }
-
+    // Make sure data is added to the db before redirecting to the /dashboard page: dataIsSaved
     const [formData, setFormData] = useState(initForm);
+    const [dataToPost, setDataToPost] = useState(null);
+    const [dataIsSaved, setDataIsSaved] = useState(false);
+    const [displayError, setDisplayError] = useState(null)
+    const history = useHistory();
+
+    const cancelHandler = () => {
+        setFormData({...initForm});
+        return history.goBack();
+    }
 
     const formChangeHandler = ({target}) => {
         setFormData({
@@ -25,18 +37,23 @@ function NewReservation(){
 
     const formSubmitHandler = (event) => {
         event.preventDefault();
-        // might need to reformat the object
-        const data = JSON.stringify(formData);
+        setDataToPost(formData);
         setFormData({...initForm});
     };
-/*TO Do */
 
-//api calls
-//catch api errors, and display them on page.
+    useEffect(() => {
+        if (dataToPost){
+        const abortController = new AbortController();
+        createReservation(dataToPost,abortController.signal)
+            .then(res => console.log(res)).catch(setDisplayError)
+        return () => abortController.abort()
+        }
+      }, [dataToPost]);
 
     return (
         <div>
             <h1>Create New Reservation</h1>
+            {displayError?<ErrorAlert error={displayError}/>:null}
             <form onSubmit={formSubmitHandler}>
                 <label htmlFor="first_name">First Name:</label> 
                 <br/>
@@ -66,7 +83,7 @@ function NewReservation(){
                 <br />
                 {/* cancel button on click should take user to previous page, useHistory to move back to whatever page they used to get here */}
                 <br />
-                <button type="cancel">Cancel</button><button type="submit">Submit</button>
+                <button type="cancel" onClick={cancelHandler}>Cancel</button><button type="submit">Submit</button>
             </form>
         </div>
     )

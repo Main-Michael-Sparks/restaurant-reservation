@@ -12,8 +12,10 @@ async function list(req, res) {
 }
 
 async function create(req, res, _next){
-    res.locals.body = req.body.data;
-    const newRes = await service.create(req.locals.body);
+    res.locals.body = req.body.data
+    console.log("service side",res.locals.body)
+    const newRes = await service.create(res.locals.body);
+    console.log(newRes)
     res.status(201).json({data: newRes})
 
 }
