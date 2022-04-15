@@ -5,17 +5,15 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary.js")
  */
 
 async function list(req, res) {
-  // pull by get and query:params
+  console.log(req.params)
   res.json({
-    data: [],
+    data: req.params
   });
 }
 
 async function create(req, res, _next){
     res.locals.body = req.body.data
-    console.log("service side",res.locals.body)
     const newRes = await service.create(res.locals.body);
-    console.log(newRes)
     res.status(201).json({data: newRes})
 
 }

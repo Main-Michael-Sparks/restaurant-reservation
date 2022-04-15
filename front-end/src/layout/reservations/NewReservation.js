@@ -3,6 +3,7 @@ import {useEffect, useState} from "react"; //might need to check syntax
 import {useHistory} from "react-router-dom"
 import {createReservation} from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
+import Dashboard from "../../dashboard/Dashboard";
 
 function NewReservation(){
 
@@ -14,25 +15,23 @@ function NewReservation(){
         reservation_time: "",
         people: "",
 
-    }
-    // Make sure data is added to the db before redirecting to the /dashboard page: dataIsSaved
+    };
+
     const [formData, setFormData] = useState(initForm);
     const [dataToPost, setDataToPost] = useState(null);
-    const [dataIsSaved, setDataIsSaved] = useState(false);
     const [displayError, setDisplayError] = useState(null)
     const history = useHistory();
 
     const cancelHandler = () => {
         setFormData({...initForm});
         return history.goBack();
-    }
+    };
 
     const formChangeHandler = ({target}) => {
         setFormData({
             ...formData,
             [target.name]:target.value
-        })
-        
+        });
     };
 
     const formSubmitHandler = (event) => {
@@ -45,10 +44,18 @@ function NewReservation(){
         if (dataToPost){
         const abortController = new AbortController();
         createReservation(dataToPost,abortController.signal)
-            .then(res => console.log(res)).catch(setDisplayError)
+            .then(returnArray =>{
+                if(returnArray.length){
+                    const date = dataToPost.reservation_date;
+                    setDataToPost(null);
+                    history.push(`/dashboard?date=${date}`)
+                };
+                return returnArray;
+            })
+            .catch(setDisplayError);
         return () => abortController.abort()
-        }
-      }, [dataToPost]);
+        };
+      }, [dataToPost,history]);
 
     return (
         <div>
