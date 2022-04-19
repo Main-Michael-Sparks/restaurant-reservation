@@ -63,31 +63,29 @@ function NewReservation(){
             <form onSubmit={formSubmitHandler}>
                 <label htmlFor="first_name">First Name:</label> 
                 <br/>
-                <input type="text" id="first_name" name="first_name" onChange={formChangeHandler} value={formData.first_name} />
+                <input type="text" id="first_name" name="first_name" placeholder="Enter first name" onChange={formChangeHandler} value={formData.first_name} required />
                 <br/>
                 <label htmlFor="last_name">Last Name:</label>
                 <br/>
-                <input type="text" id="last_name" name="last_name" onChange={formChangeHandler} value={formData.last_name}/>
+                <input type="text" id="last_name" name="last_name" placeholder="Enter last name" onChange={formChangeHandler} value={formData.last_name} required/>
                 <br/>
                 <label htmlFor="mobile_number">Mobile Number:</label>
                 <br/>
-                <input type="text" id="mobile_number" name="mobile_number" onChange={formChangeHandler} value={formData.mobile_number}/>
+                <input type="text" id="mobile_number" name="mobile_number" placeholder="Enter mobile number" onChange={formChangeHandler} value={formData.mobile_number} required/>
                 <br/>
                 {/*might need to come back and fix format and inputs for date/time */}
                 <label htmlFor="reservation_date">Date of Reservation:</label>
                 <br/>
-                <input type="date" id="reservation_date" name="reservation_date" onChange={formChangeHandler} value={formData.reservation_date}/>
+                <input type="date" id="reservation_date" name="reservation_date" placeholder="Enter reservation date" onChange={formChangeHandler} value={formData.reservation_date} required/>
                 <br/>
                 <label htmlFor="reservation_time">Time of Reservation:</label>
                 <br/>
-                <input type="time" id="reservation_time" name="reservation_time" onChange={formChangeHandler} value={formData.reservation_time}/>
+                <input type="time" id="reservation_time" name="reservation_time" placeholder="Enter reservation time" onChange={formChangeHandler} value={formData.reservation_time} required/>
                 <br />
-                {/*info: "must be at lest 1 person" */}
-                <label htmlFor="people">Number of people in the party:</label>
+                <label htmlFor="people" min="1" >Number of people in the party:</label>
                 <br/>
-                <input type="number" id="people" name="people" onChange={formChangeHandler} value={formData.people}/>
+                <input type="number" id="people" name="people" placeholder="Enter number of people" onChange={formChangeHandler} value={formData.people} required/>
                 <br />
-                {/* cancel button on click should take user to previous page, useHistory to move back to whatever page they used to get here */}
                 <br />
                 <button type="cancel" onClick={cancelHandler}>Cancel</button><button type="submit">Submit</button>
             </form>
