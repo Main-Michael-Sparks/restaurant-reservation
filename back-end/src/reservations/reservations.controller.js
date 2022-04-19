@@ -5,14 +5,13 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary.js")
  */
 
 async function list(req, res) {
-  console.log(req.params)
-  res.json({
-    data: req.params
-  });
+  const reservation_date = req.query.date;
+  const resDates = await service.read(reservation_date);
+  res.json({data: resDates});
 }
 
 async function create(req, res, _next){
-    res.locals.body = req.body.data
+    res.locals.body = req.body.data // delete if never resued outside of create function
     const newRes = await service.create(res.locals.body);
     res.status(201).json({data: newRes})
 

@@ -3,7 +3,6 @@ import {useEffect, useState} from "react"; //might need to check syntax
 import {useHistory} from "react-router-dom"
 import {createReservation} from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
-import Dashboard from "../../dashboard/Dashboard";
 
 function NewReservation(){
 
@@ -74,7 +73,7 @@ function NewReservation(){
                 <br/>
                 <input type="text" id="mobile_number" name="mobile_number" onChange={formChangeHandler} value={formData.mobile_number}/>
                 <br/>
-                {/*might need to come back and fix formate and inputs for date/time */}
+                {/*might need to come back and fix format and inputs for date/time */}
                 <label htmlFor="reservation_date">Date of Reservation:</label>
                 <br/>
                 <input type="date" id="reservation_date" name="reservation_date" onChange={formChangeHandler} value={formData.reservation_date}/>

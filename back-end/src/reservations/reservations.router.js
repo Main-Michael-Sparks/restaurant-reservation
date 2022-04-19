@@ -8,9 +8,13 @@ const router = require("express").Router();
 const controller = require("./reservations.controller");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 
+
+router.route(":/date?")
+    .get(controller.list)
+
 router.route("/")
     .get(controller.list)
-    .post(controller.create)
-    .all(methodNotAllowed);
+    .post(controller.create);
+    //.all(methodNotAllowed); // handle preflightRequests before adding this
 
 module.exports = router;
