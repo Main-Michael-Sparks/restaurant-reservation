@@ -10,7 +10,8 @@ function create(newRes){
 function read( reservation_date ) {
     return knex(resTable)
         .select("*")
-        .where({ reservation_date });
+        .where({ reservation_date })
+        .orderBy('reservation_time');
 
 }
 

@@ -10,41 +10,49 @@ import {next, today, previous} from "../utils/date-time"
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ dateProp }) {
+function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [date, setDate] = useState(dateProp)
+  const [newDate, setNewDate] = useState()
   const query = useQuery();
   const searchDate = query.get("date")
 
+   // react dep [date] omitted to prevent loop; Render once on the value of useQuery()
+   useEffect(()=>{
+    if(searchDate){
+      return setNewDate(searchDate);
+    }
+    setNewDate(date)
+  },[searchDate]) 
+
   const dayButtonHandler = ({ target }) => {
+
     if(target.name === "previous"){
-      setDate(previous(date))
+      setNewDate(previous(newDate))
     }
     if(target.name === "next"){
-      setDate(next(date))
+      setNewDate(next(newDate))
     }
 
     if(target.name === "today"){
-      setDate(today(date))
+      setNewDate(today(newDate))
     }
   };
 
-  useEffect(()=>{
-    if(searchDate){
-      setDate(searchDate);
-    }
-  },[dateProp,searchDate])
-
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [newDate,date]);
   function loadDashboard() {
+    const dateObj = {"date": date}
+    if(newDate){
+      dateObj.date = newDate
+    }
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations(dateObj , abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
+  
   return (
     <main>
       <h1>Dashboard</h1>
