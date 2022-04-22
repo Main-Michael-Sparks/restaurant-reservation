@@ -43,13 +43,13 @@ function NewReservation(){
         if (dataToPost){
         const abortController = new AbortController();
         createReservation(dataToPost,abortController.signal)
-            .then(returnArray =>{
-                if(returnArray.length){
-                    const date = dataToPost.reservation_date;
+            .then(resObj =>{
+                if(resObj.reservation_date){
+                    const date = resObj.reservation_date;
                     setDataToPost(null);
                     history.push(`/dashboard?date=${date}`)
                 };
-                return returnArray;
+                return resObj
             })
             .catch(setDisplayError);
         return () => abortController.abort()

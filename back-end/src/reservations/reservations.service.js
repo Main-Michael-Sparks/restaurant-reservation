@@ -4,7 +4,8 @@ const resTable = "reservations"
 
 function create(newRes){
     return knex(resTable)
-        .insert(newRes,['reservation_date']);
+        .insert(newRes,['*'])
+        .then(returnRes=>returnRes[0]);
 };
 
 function read( reservation_date ) {

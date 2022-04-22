@@ -64,7 +64,7 @@ function validReserTime(req, res, next){
   return next()
 }
 
-async function list(req, res) {
+async function list(req, res, _next) {
   const reservation_date = req.query.date;
   const resDates = await service.read(reservation_date);
   res.json({ data: resDates });
