@@ -31,7 +31,12 @@ function NewReservation(){
             ...formData,
             [target.name]:target.value,
         });
-        console.log(formData)
+        if (target.name === "people"){
+            setFormData({
+                ...formData,
+                [target.name]: Number(target.value)
+            })
+        }
     };
 
     const formSubmitHandler = (event) => {
