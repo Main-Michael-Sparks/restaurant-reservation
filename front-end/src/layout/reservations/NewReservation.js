@@ -29,12 +29,16 @@ function NewReservation(){
     const formChangeHandler = ({target}) => {
         setFormData({
             ...formData,
-            [target.name]:target.value
+            [target.name]:target.value,
         });
+        console.log(formData)
     };
 
     const formSubmitHandler = (event) => {
         event.preventDefault();
+        setFormData({...formData,
+            people: Number(formData.people)
+        })
         setDataToPost(formData);
         setFormData({...initForm});
     };

@@ -8,9 +8,15 @@ function validReser(req, res, next) {
   // refactor for muliple errors
   // pass down an array nest errors?
   // use a helper function to validate object props
-      res.locals.reservation = req.body.data
-      res.locals.reservation.people = Number(req.body.data.people)
       const errorObj = {status: 400, message:''}
+      console.log(res.locals.reservation)
+
+      if (!req.body.data) {
+        errorObj.message = "data key is missing"
+        return next(errorObj)
+      } else {
+        res.locals.reservation = req.body.data;
+      }
 
       if(!res.locals.reservation){
         errorObj.message = "data key is missing"
@@ -38,9 +44,8 @@ function validReser(req, res, next) {
         return next(errorObj)
       }
       if(!res.locals.reservation.people || 
-        isNaN(res.locals.reservation.people) || 
+        !Number.isInteger(res.locals.reservation.people) || 
         res.locals.reservation.people < 1 ){
-
         errorObj.message = 'Reservation must have some number of people'
         return next(errorObj)
       }
