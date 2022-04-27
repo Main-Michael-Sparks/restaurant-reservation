@@ -76,6 +76,5 @@ export async function createReservation(data, signal) {
     body: JSON.stringify({ data }),
     signal,
   };
-  console.log("before going to server", payload)
   return await fetchJson(url,payload);
 };

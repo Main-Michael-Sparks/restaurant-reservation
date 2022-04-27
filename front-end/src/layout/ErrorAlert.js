@@ -9,11 +9,24 @@ import React from "react";
  */
 
 function ErrorAlert({ error }) {
-  return (
-    error && (
-      <div className="alert alert-danger m-2">Error: {error.message}</div>
-    )
-  );
-}
 
-export default ErrorAlert;
+  const errorComp = (
+    <div className="alert alert-danger m-1">
+      <ul>
+        {error?error.map((errors, index)=>{
+            return (
+              <li key={index}>Error: {errors.message}</li>
+            )
+        }):null}
+      </ul>
+    </div>
+    )
+
+  if(Array.isArray(error) && error.length > 0){
+      return errorComp
+  } else {
+    return null
+  }
+};
+
+export default ErrorAlert
