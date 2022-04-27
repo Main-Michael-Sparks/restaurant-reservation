@@ -50,8 +50,8 @@ function NewReservation(){
                 console.log("future error state activated")
                 return setDisplayError([{message: "Reservation must be in the future"}])
             }
-        } else {
         }
+        
     
     },[formData])
 
