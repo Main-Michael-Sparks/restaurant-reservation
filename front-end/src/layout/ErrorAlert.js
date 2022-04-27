@@ -13,11 +13,11 @@ function ErrorAlert({ error }) {
   const errorComp = (
     <div className="alert alert-danger m-1">
       <ul>
-        {error.map((errors, index)=>{
+        {error?error.map((errors, index)=>{
             return (
               <li key={index}>Error: {errors.message}</li>
             )
-        })}
+        }):null}
       </ul>
     </div>
     )

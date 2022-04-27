@@ -16,35 +16,41 @@ function NewReservation(){
         people: "",
 
     };
-    //need to disable the activeErrorState var after rendering the errorAlert comp. 
+    const initErrors = []
+
     const [formData, setFormData] = useState(initForm);
     const [dataToPost, setDataToPost] = useState(null);
-    const [displayError, setDisplayError] = useState([]);
-    const [resDate, setResDate] = useState();
+    const [displayError, setDisplayError] = useState(initErrors);
+    const [errorHandover, setErrorHandover] = useState(null)
+    const [resDate, setResDate] = useState(null);
     const [activeErrorState, setActiveErrorState] = useState(false)
     const history = useHistory();
     const currentDay = new Date(today());
+
     useEffect(()=>{
 
         if(formData.reservation_date){
             setResDate(new Date(formData.reservation_date))
         }
-
         if(resDate){
             if(resDate.getDay() === 1 && resDate.getTime() < currentDay.getTime()){
+                console.log("both Error state Activated")
                 return setDisplayError([
-                    ...displayError,
                     {message: "Reservation cannot be on Tuesday"},
                     {message: "Reservation must be in the future"}
                 ])
             }
             if(resDate.getDay() === 1){
-                return setDisplayError([...displayError,{message: "Reservation cannot be on Tuesday"}])
+                console.log("tuesday error state activated")
+                return setDisplayError([{message: "Reservation cannot be on Tuesday"}])
+
             }
 
             if(resDate.getTime() < currentDay.getTime()){
-                return setDisplayError([...displayError,{message: "Reservation must be in the future"}])
+                console.log("future error state activated")
+                return setDisplayError([{message: "Reservation must be in the future"}])
             }
+        } else {
         }
     
     },[formData])
@@ -70,6 +76,7 @@ function NewReservation(){
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if(!displayError.length) {
+            setActiveErrorState(false)
             setFormData({...formData,
                 people: Number(formData.people)
             })
@@ -78,8 +85,20 @@ function NewReservation(){
         }
         if (displayError.length) {
             setActiveErrorState(true);
+            setFormData({...formData,
+                "reservation_date":initForm.reservation_date
+            });
         }
     };
+
+    useEffect(()=>{
+        if(activeErrorState){
+            setErrorHandover(displayError);
+            setDisplayError(initErrors);
+            setResDate(null);
+        }
+
+    },[activeErrorState]) 
 
     useEffect(() => {
         if (dataToPost){
@@ -89,11 +108,11 @@ function NewReservation(){
                 if(resObj.reservation_date){
                     const date = resObj.reservation_date;
                     setDataToPost(null);
-                    history.push(`/dashboard?date=${date}`)
+                    history.push(`/dashboard?date=${date}`);
                 };
                 return resObj
             })
-            .catch(error=> setDisplayError([...displayError,error]));
+            .catch(error=>setDisplayError([error]));
         return () => abortController.abort()
         };
       }, [dataToPost,history]);
@@ -101,7 +120,7 @@ function NewReservation(){
     return (
         <div>
             <h1>Create New Reservation</h1>
-            { activeErrorState?<ErrorAlert error={displayError}/>: null }
+            { activeErrorState && errorHandover?<ErrorAlert error={errorHandover}/>: null }
             <form onSubmit={formSubmitHandler}>
                 <label htmlFor="first_name">First Name:</label> 
                 <br/>

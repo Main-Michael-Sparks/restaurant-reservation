@@ -1,4 +1,5 @@
 const service = require("./reservations.service.js")
+const serviceDate = require("./reservations.service.date.js")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary.js")
 /**
  * List handler for reservation resources
@@ -9,7 +10,6 @@ function validReser(req, res, next) {
   // pass down an array nest errors?
   // use a helper function to validate object props
       const errorObj = {status: 400, message:''}
-      console.log(res.locals.reservation)
 
       if (!req.body.data) {
         errorObj.message = "data key is missing"
@@ -69,6 +69,29 @@ function validReserTime(req, res, next){
   return next()
 }
 
+// /returns 400 if reservation occurs in the past
+// /returns 400 if reservation_date falls on a tuesday
+
+function vaildReserFuture(req, res, next){
+  const {reservation_date} = res.locals.reservation;
+  const currentDay = new Date(serviceDate.today());
+  const reserDate = new Date(reservation_date);
+
+  if(reserDate.getTime() < currentDay.getTime()){
+    return next({ status:400, message:`reservation_date:${reservation_date} must be on a future date` })
+  }
+  return next();
+}
+
+function validReserCloseDate(req,res,next){
+  const {reservation_date} = res.locals.reservation;
+  const reserDate = new Date(reservation_date)
+  if(reserDate.getDay() === 1){
+    return next({ status:400, message:`reservation_date:${reservation_date} must be during business days` })
+  }
+  return next();
+}
+
 async function list(req, res, _next) {
   const reservation_date = req.query.date;
   const resDates = await service.read(reservation_date);
@@ -82,5 +105,5 @@ async function create(req, res, _next){
 }
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create:[validReser,validReserDate,validReserTime,asyncErrorBoundary(create)]
+  create:[validReser,validReserDate,validReserTime,vaildReserFuture,validReserCloseDate,asyncErrorBoundary(create)]
 };
