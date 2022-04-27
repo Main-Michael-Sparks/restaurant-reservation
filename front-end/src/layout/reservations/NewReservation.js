@@ -1,12 +1,14 @@
 import React from "react";
 import {useEffect, useState} from "react"; //might need to check syntax
-import {useHistory} from "react-router-dom"
+import {useHistory} from "react-router-dom";
 import {createReservation} from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
-import {today} from "../../utils/date-time"
+import {today} from "../../utils/date-time";
+import {convertTime} from "../../utils/convertTime";
 
 function NewReservation(){
 
+    //initial state for state variables
     const initForm = {
         first_name: "",
         last_name: "",
@@ -16,50 +18,78 @@ function NewReservation(){
         people: "",
 
     };
-    const initErrors = []
 
+    const initErrors = [];
+
+    //state variables and other hooks
     const [formData, setFormData] = useState(initForm);
     const [dataToPost, setDataToPost] = useState(null);
-    const [displayError, setDisplayError] = useState(initErrors);
-    const [errorHandover, setErrorHandover] = useState(null)
     const [resDate, setResDate] = useState(null);
-    const [activeErrorState, setActiveErrorState] = useState(false)
+    const [displayError, setDisplayError] = useState(initErrors);
+    const [errorHandover, setErrorHandover] = useState(null);
+    const [activeErrorState, setActiveErrorState] = useState(false);
+
     const history = useHistory();
     const currentDay = new Date(today());
+    const resTime = convertTime(formData.reservation_time);
 
+    //reservation date validation
     useEffect(()=>{
-
         if(formData.reservation_date){
-            setResDate(new Date(formData.reservation_date))
-        }
+            setResDate(new Date(formData.reservation_date));
+        };
+
         if(resDate){
             if(resDate.getDay() === 1 && resDate.getTime() < currentDay.getTime()){
-                console.log("both Error state Activated")
                 return setDisplayError([
                     {message: "Reservation cannot be on Tuesday"},
                     {message: "Reservation must be in the future"}
-                ])
-            }
-            if(resDate.getDay() === 1){
-                console.log("tuesday error state activated")
-                return setDisplayError([{message: "Reservation cannot be on Tuesday"}])
+                ]);
+            };
 
-            }
+            if(resDate.getDay() === 1){
+                return setDisplayError([{message: "Reservation cannot be on Tuesday"}]);
+
+            };
 
             if(resDate.getTime() < currentDay.getTime()){
-                console.log("future error state activated")
-                return setDisplayError([{message: "Reservation must be in the future"}])
-            }
-        }
-        
-    
-    },[formData])
+                return setDisplayError([{message: "Reservation must be in the future"}]);
+            };
+        };
 
+        if(resTime.length){
+            if(resTime[0] <= 10 && resTime[1] <= 30){
+                if(!displayError.find(errMsg => errMsg.message === "Reservation time must be when we are open.")){
+                    return setDisplayError([
+                        ...displayError,
+                        {message: "Reservation time must be when we are open."}
+                    ]);
+                } else {
+                    return null;
+                }
+            };
+
+            if (resTime[0] >= 21 && resTime[1] >= 30) {
+                if(!displayError.find(errMsg => errMsg.message === "Reservation time must be before we close.")){
+                    setDisplayError([
+                        ...displayError,
+                        {message: "Reservation time must be before we close."}
+                    ]);
+                } else {
+                    return null;
+                }
+            };
+        };
+
+    },[formData]);
+
+    // cancel button handler
     const cancelHandler = () => {
         setFormData({...initForm});
         return history.goBack();
     };
 
+    //grabs user input from the form
     const formChangeHandler = ({target}) => {
         setFormData({
             ...formData,
@@ -73,6 +103,7 @@ function NewReservation(){
         }
     };
 
+    // gets form data ready to be sent off to api
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if(!displayError.length) {
@@ -91,6 +122,7 @@ function NewReservation(){
         }
     };
 
+    // validation error(s) handler
     useEffect(()=>{
         if(activeErrorState){
             setErrorHandover(displayError);
@@ -100,6 +132,7 @@ function NewReservation(){
 
     },[activeErrorState]) 
 
+    //api call
     useEffect(() => {
         if (dataToPost){
         const abortController = new AbortController();
