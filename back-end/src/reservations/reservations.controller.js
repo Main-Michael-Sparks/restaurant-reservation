@@ -78,7 +78,7 @@ function vaildReserFuture(req, res, next){
   const reserDate = new Date(reservation_date);
 
   if(reserDate.getTime() < currentDay.getTime()){
-    return next({ status:400, message:`reservation_date:${reservation_date} must be on a future date` })
+    return next({ status:400, message:`reservation_date: ${reservation_date} must be on a future date` })
   }
   return next();
 }
@@ -87,7 +87,7 @@ function validReserCloseDate(req,res,next){
   const {reservation_date} = res.locals.reservation;
   const reserDate = new Date(reservation_date)
   if(reserDate.getDay() === 1){
-    return next({ status:400, message:`reservation_date:${reservation_date} must be during business days` })
+    return next({ status:400, message:`reservation_date:${reservation_date} we are closed` })
   }
   return next();
 }
