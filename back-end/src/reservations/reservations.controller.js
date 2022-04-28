@@ -94,13 +94,13 @@ function validReserCloseDate(req,res,next){
 
 function validReserTime(req, res, next){
   const {reservation_time} = res.locals.reservation;
-  const reserTime = serviceDate.convertTime(reservation_time);
-  const currTime = serviceDate.convertTime(`${res.locals.currentDay.getHours()}:${res.locals.currentDay.getMinutes()}`)
-  if (reserTime[0] <= 10 && reserTime[1] <= 30) {
+  const reserTime = serviceDate.convertTime(reservation_time,true);
+  const currTime = serviceDate.convertTime(`${res.locals.currentDay.getHours()}:${res.locals.currentDay.getMinutes()}`,true)
+  if (reserTime[0] < ((10*60)+30)) {
     return next({status:400, message: `reservation_time: ${reservation_time} must be when we are open`})
   };
 
-  if(reserTime[0] >= 21 && reserTime[1] >= 30){
+  if(reserTime[0] > ((21*60)+30)){
     return next({status:400, message: `reservation_time: ${reservation_time} must be before we close`})
   };
 
