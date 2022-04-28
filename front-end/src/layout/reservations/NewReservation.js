@@ -79,6 +79,7 @@ function NewReservation(){
                 }
             };
         };
+
         if(resDate && resTime.length){
             if((resDate.getTime() === currentDay.getTime()) && (resTime[0] < curTime[0])){
                 if(!displayError.find(errMsg => errMsg.message === "Reservation time must be in the future")){
@@ -89,12 +90,8 @@ function NewReservation(){
                 } else {
                     return null;
                 }
-
             }
-
         }
-        //if (resDate === curDate) && (resTime < curTime) // display error
-
 
     },[formData]);
 
