@@ -60,7 +60,7 @@ function validReserDate(req, res, next){
   }
   return next()
 }
-function validReserTime(req, res, next){
+function validReserFormat(req, res, next){
   const timeRegPat = /[0-9]{2}:[0-9]{2}/;
   const { reservation_time } = res.locals.reservation;
   if(!reservation_time.match(timeRegPat)) {
@@ -74,10 +74,10 @@ function validReserTime(req, res, next){
 
 function vaildReserFuture(req, res, next){
   const {reservation_date} = res.locals.reservation;
-  const currentDay = new Date(serviceDate.today());
-  const reserDate = new Date(reservation_date);
+  res.locals.currentDay = new Date(serviceDate.today());
+  res.locals.reserDate = new Date(reservation_date);
 
-  if(reserDate.getTime() < currentDay.getTime()){
+  if(res.locals.reserDate.getTime() < res.locals.currentDay.getTime()){
     return next({ status:400, message:`reservation_date: ${reservation_date} must be on a future date` })
   }
   return next();
@@ -92,6 +92,25 @@ function validReserCloseDate(req,res,next){
   return next();
 }
 
+function validReserTime(req, res, next){
+  const {reservation_time} = res.locals.reservation;
+  const reserTime = serviceDate.convertTime(reservation_time);
+  const currTime = serviceDate.convertTime(`${res.locals.currentDay.getHours()}:${res.locals.currentDay.getMinutes()}`)
+  if (reserTime[0] <= 10 && reserTime[1] <= 30) {
+    return next({status:400, message: `reservation_time: ${reservation_time} must be when we are open`})
+  };
+
+  if(reserTime[0] >= 21 && reserTime[1] >= 30){
+    return next({status:400, message: `reservation_time: ${reservation_time} must be before we close`})
+  };
+
+  if((res.locals.reserDate.getTime() === res.locals.currentDay.getTime()) && (reserTime[0] < currTime[0])){
+    return next({status:400, message: `reservation_time: ${reservation_time} must be in the future`})
+  }
+  return next()
+}
+
+
 async function list(req, res, _next) {
   const reservation_date = req.query.date;
   const resDates = await service.read(reservation_date);
@@ -105,5 +124,5 @@ async function create(req, res, _next){
 }
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create:[validReser,validReserDate,validReserTime,vaildReserFuture,validReserCloseDate,asyncErrorBoundary(create)]
+  create: [validReser,validReserDate,validReserFormat,vaildReserFuture,validReserCloseDate,validReserTime,asyncErrorBoundary(create)]
 };

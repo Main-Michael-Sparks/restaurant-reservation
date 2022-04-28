@@ -80,10 +80,28 @@ function next(currentDate) {
   date.setDate(date.getDate() + 1);
   return asDateString(date);
 };
+
+/**
+ * Formats a time string HH:MM.
+ * @param time
+ *  
+ * The specified time formatted as integers [hh,mm]
+ * @returns {array}
+ */
+ function convertTime(time){
+    
+  if(!time) return []
+
+  const timeArray = time.split(":")
+
+  return [Number(timeArray[0]),Number(timeArray[1])]
+};
+
 module.exports ={
     formatAsDate,
     formatAsTime,
     today,
     previous,
-    next
+    next,
+    convertTime
 }
