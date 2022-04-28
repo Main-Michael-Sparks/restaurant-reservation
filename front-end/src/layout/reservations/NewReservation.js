@@ -32,7 +32,7 @@ function NewReservation(){
     const history = useHistory();
     const currentDay = new Date(today());
     const resTime = convertTime(formData.reservation_time);
-
+    const curTime = convertTime(`${currentDay.getHours()}:${currentDay.getMinutes()}`);
     //reservation date validation
     useEffect(()=>{
         if(formData.reservation_date){
@@ -49,7 +49,6 @@ function NewReservation(){
 
             if(resDate.getDay() === 1){
                 return setDisplayError([{message: "Reservation cannot be on Tuesday"}]);
-
             };
 
             if(resDate.getTime() < currentDay.getTime()){
@@ -80,10 +79,26 @@ function NewReservation(){
                 }
             };
         };
+        if(resDate && resTime.length){
+            if((resDate.getTime() === currentDay.getTime()) && (resTime[0] < curTime[0])){
+                if(!displayError.find(errMsg => errMsg.message === "Reservation time must be in the future")){
+                    setDisplayError([
+                        ...displayError,
+                        {message: "Reservation time must be in the future"}
+                    ]);
+                } else {
+                    return null;
+                }
+
+            }
+
+        }
+        //if (resDate === curDate) && (resTime < curTime) // display error
+
 
     },[formData]);
 
-    // cancel button handler
+    //cancel button handler
     const cancelHandler = () => {
         setFormData({...initForm});
         return history.goBack();
@@ -95,31 +110,34 @@ function NewReservation(){
             ...formData,
             [target.name]:target.value,
         });
+
         if (target.name === "people"){
             setFormData({
                 ...formData,
                 [target.name]: Number(target.value)
-            })
-        }
+            });
+        };
     };
 
     // gets form data ready to be sent off to api
     const formSubmitHandler = (event) => {
+        // use submit buttion to trigger validators
         event.preventDefault();
         if(!displayError.length) {
             setActiveErrorState(false)
             setFormData({...formData,
                 people: Number(formData.people)
-            })
+            });
             setDataToPost(formData);
             setFormData({...initForm});
-        }
+        };
+
         if (displayError.length) {
             setActiveErrorState(true);
             setFormData({...formData,
                 "reservation_date":initForm.reservation_date
             });
-        }
+        };
     };
 
     // validation error(s) handler
@@ -128,9 +146,9 @@ function NewReservation(){
             setErrorHandover(displayError);
             setDisplayError(initErrors);
             setResDate(null);
-        }
+        };
 
-    },[activeErrorState]) 
+    },[activeErrorState]);
 
     //api call
     useEffect(() => {
