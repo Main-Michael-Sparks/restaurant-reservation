@@ -1,5 +1,5 @@
 import React from "react";
-import {useEffect, useState} from "react"; //might need to check syntax
+import {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import {createReservation} from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
