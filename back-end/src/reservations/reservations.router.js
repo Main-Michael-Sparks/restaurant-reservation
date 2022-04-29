@@ -9,6 +9,8 @@ const controller = require("./reservations.controller");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 
 
+//router.route("/:reservation_Id")
+
 router.route("/")
     .get(controller.list)
     .post(controller.create);
