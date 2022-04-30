@@ -9,6 +9,7 @@ function NewTable(){
     const initForm = {
         table_name:"",
         capacity:""
+        //possibly add seated here.
     };
     const initErrors = []
 
@@ -23,14 +24,15 @@ function NewTable(){
     const [errorStateComplete, setErrorStateComplete] = useState(null);
     const [dataValidationComplete, setDataValidtionComplete] = useState(null);
     
+    const history = useHistory();
     
-    // cancel button handler
+    // Cancel button handler
     const cancelHandler = () => {
         setFormData({...initForm});
         return history.goBack();
     }; 
 
-    // captures form data
+    // Captures form data
     const formChangeHandler = ({target}) => {
         setFormData({
             ...formData,
@@ -45,57 +47,139 @@ function NewTable(){
         };
     };
 
-    /*const formSubmitHandler = (event) => {
+    // handles the form submit process
+    const formSubmitHandler = (event) => {
 
         event.preventDefault();
-        if(errorsComplete){
-            setActiveErrorState(false);
-            setErrorHandover(null);
-            setErrorsComplete(null);
-            setDataValidationStage(false);
-            setDataValidtionComplete(false);
-            setErrorsComplete(null)
-         };
+        // error & validation cleanup
+         if(errorStateComplete){
+            setActiveErrorState(null);
+            setErrorHandoff(null);
+            setDataValidationStage(null);
+            setDataValidtionComplete(null);
+            setErrorStateComplete(null);
+         }; 
 
         setDataToValidate({...formData,
-             people: Number(formData.people)
+             capacity: Number(formData.capacity)
         });
 
         setDataValidationStage(true)
-    }; */
+        console.log("data to validate", dataToValidate)
+        console.log("data validation stage", dataValidationStage)
 
-    
+    };
 
+    useEffect(()=>{
+        if(dataValidationStage){
 
-   /* useEffect(() => {
+            if(!dataToValidate.table_name){
+                if(!displayError.find(errMsg => errMsg.message === "Table_name cannot be empty or missing")){
+                    setDisplayError([
+                       ...displayError,
+                       {message: "Table_name cannot be empty or missing"}
+                   ]);
+                }
+            };
+
+            if(dataToValidate.table_name && dataToValidate.table_name.length == 1){
+                if(!displayError.find(errMsg => errMsg.message === "Table_name must be longer than one chacter")){
+                    setDisplayError([
+                       ...displayError,
+                       {message: "Table_name must be longer than one chacter"}
+                   ]);
+                }
+            };
+
+            if(!dataToValidate.capacity){
+                if(!displayError.find(errMsg => errMsg.message === "Capacity cannot be missing, and greater than zero")){
+                    setDisplayError([
+                    ...displayError,
+                    {message: "Capacity cannot missing, or less than zero"}
+                ]);
+                }
+            };
+
+            if(isNaN(dataToValidate.capacity)){
+                if(!displayError.find(errMsg => errMsg.message === "Capacity must be a number")){
+                    setDisplayError([
+                    ...displayError,
+                    {message: "Capacity must be a number"}
+                ]);
+                };
+            };
+
+            setDataValidtionComplete(true)
+        }
+
+    },[dataValidationStage,dataToValidate]);
+
+    // sends data to api call or error handler depending on result of validation
+    useEffect(()=>{
+        if(dataValidationComplete){
+            if (displayError.length) {
+                setActiveErrorState(true);
+                setDataIsValid(false);
+
+            } else {
+               setActiveErrorState(false)
+               setDataIsValid(true);
+            };
+        };
+    },[dataValidationComplete]);
+
+    // directs error traffic to ErrorAlert comp and triggers error var clean up. 
+    useEffect(()=>{
+        if(activeErrorState){
+            setErrorHandoff(displayError);
+            setDisplayError(initErrors);
+            setErrorStateComplete(true);
+        };
+    },[activeErrorState]);
+
+    // directs form data traffic to api call if form data passes validation. 
+    useEffect(()=>{
+        if(dataIsValid){
+            setDataToPost(dataToValidate);
+
+        };
+
+    },[dataIsValid]);
+
+    // api call
+    useEffect(() => {
+ 
         if (dataToPost){
         const abortController = new AbortController();
-        createReservation(dataToPost,abortController.signal)
-            .then(resObj =>{
-                if(resObj.reservation_date){
-                    const date = resObj.reservation_date;
+        createTable(dataToPost,abortController.signal)
+            .then(apiResponse => {
+                if(apiResponse.table_id){
                     setDataToPost(null);
-                    history.push(`/dashboard?date=${date}`);
+                    history.push(`/dashboard`);
                 };
-                return resObj
-            })
-            .catch();
+                return apiResponse;
+            }) 
+            .catch(error => {
+                setDisplayError([error]);
+                setActiveErrorState(true);
+            });
         return () => abortController.abort()
         };
-      }, []); */
+      },[dataToPost]);
 
 
     return (
         <div>
             <h1>New Table</h1>
-            <form onSubmit={null}>
+            {activeErrorState && errorHandoff? <ErrorAlert error={errorHandoff} />:null}
+            <form onSubmit={formSubmitHandler}>
                 <label htmlFor="table_name">Table Name:</label>
                 <br/>
-                <input name="table_name" type="text" id="table_name" placeholder="Enter table name" onChange={formChangeHandler} value={formData.table_name} required />
+                <input name="table_name" type="text" id="table_name" placeholder="Enter table name" onChange={formChangeHandler} value={formData.table_name} />
                 <br/>
                 <label htmlFor="capacity" min="1">Capacity:</label>
                 <br/>
-                <input name="capacity" type="number" id="capacity" placeholder="Number of people" onChange={formChangeHandler} value={null} required/>
+                <input name="capacity" type="number" id="capacity" placeholder="Number of people" onChange={formChangeHandler} value={null} />
                 <br/>
                 <br/>
                 <button type="cancel" onClick={cancelHandler}>Cancel</button><button type="submit">Submit</button>

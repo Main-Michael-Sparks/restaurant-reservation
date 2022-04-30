@@ -27,7 +27,7 @@ function validTableData(req, res, next) {
         return next(errorObj);
     };
 
-    if(isNaN(res.locals.capacity)){
+    if(isNaN(res.locals.table.capacity)){
         errorObj.message = "capacity must be a numer";
         return next(errorObj);
     };
@@ -37,8 +37,10 @@ function validTableData(req, res, next) {
 
 
 async function create(req, res, next){
-    const { table } = res.locals.table;
+    const { table } = res.locals;
+    table.seated = false; //come back and deal with this properly
     const data = await service.create(table)
+    console.log(data)
     res.status(201).json({ data })
 };
 
