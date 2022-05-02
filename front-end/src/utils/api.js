@@ -91,3 +91,14 @@ export async function createTable(data, signal) {
 
   return await fetchJson(url, payload);
 };
+
+export async function listTables(signal){
+  const url = `${API_BASE_URL}/tables`;
+  const payload = {
+    method: "GET",
+    headers,
+    signal
+  };
+
+  return await fetchJson(url,payload,[]);
+};

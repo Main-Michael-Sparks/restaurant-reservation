@@ -9,7 +9,7 @@ const methodNotAllowed = require("../errors/methodNotAllowed");
 //    .get(controller.read)
 
 router.route("/")
-    //.get(controller.list)
+    .get(controller.list)
     .post(controller.create);
 
 

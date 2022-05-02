@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import ReservationTable from "./ReservationTable"
+import TablesTable from "./TablesTable";
 import {next, today, previous} from "../utils/date-time"
 /**
  * Defines the dashboard page.
@@ -12,11 +13,12 @@ import {next, today, previous} from "../utils/date-time"
  */
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([])
+  const [apiError, setApiError] = useState(null);
   const [newDate, setNewDate] = useState()
   const query = useQuery();
   const searchDate = query.get("date")
-
+  console.log("tables", tables)
    // react dep [date] omitted to prevent loop; Render once on the value of useQuery()
    useEffect(()=>{
     if(searchDate){
@@ -46,21 +48,40 @@ function Dashboard({ date }) {
       dateObj.date = newDate
     }
     const abortController = new AbortController();
-    setReservationsError(null);
+    setApiError(null);
     listReservations(dateObj , abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      .catch(setApiError);
     return () => abortController.abort();
   }
-  
+
+  useEffect(loadTables,[]);
+  function loadTables(){
+    console.log("load tables envoked")
+    const abortController  = new AbortController();
+    setApiError(null);
+    listTables(abortController.signal)
+      .then(tableData => {
+          console.log("response from API", tableData)
+          return setTables([tableData]);
+      })
+      .catch(setApiError)
+    return () => abortController.abort();
+  };
+   console.log(reservations)
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations</h4>
       </div>
-      <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={apiError} />
+      <div>
+      <TablesTable tables={tables} />
+      </div>
+      <div>
       <ReservationTable reservations={reservations} />
+      </div>
       {/*JSON.stringify(reservations)*/}
       {
         reservations?

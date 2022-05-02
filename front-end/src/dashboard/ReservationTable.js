@@ -2,7 +2,7 @@ import React  from "react";
 
 function ReservationTable({reservations}) {
 
-    if (reservations.length) {
+    if (reservations) {
         return (
             <table>
                 <thead>
@@ -13,9 +13,11 @@ function ReservationTable({reservations}) {
                         <th>Reservation Date</th>
                         <th>Reservation Time</th>
                         <th>Number of People</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
+        {reservations && reservations.length == 0?(<tr><td colSpan={7}>No Reservations for date specified..</td></tr>): null}
         {reservations.map((reservation, index) =>{
             return (
               <tr key={index}>
@@ -36,6 +38,9 @@ function ReservationTable({reservations}) {
                   </td>
                   <td>
                     {reservation.people}
+                  </td>
+                  <td>
+                    to be determed
                   </td>
               </tr>
             ) 
