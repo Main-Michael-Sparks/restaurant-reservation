@@ -80,3 +80,16 @@ export function next(currentDate) {
   date.setDate(date.getDate() + 1);
   return asDateString(date);
 };
+
+
+export function dayOfWeek(currentDay){
+  if(!currentDay) return "";
+  const date = new Date(currentDay);
+  const weekdays = ["Sunday","Monday","Tuesday","Thursday","Friday","Saturday"]
+  const day = weekdays.find((day,index)=>{
+      if(index === date.getDay()){
+          return day;
+      };
+  });
+  return day;
+};

@@ -6,6 +6,7 @@ import { today } from "../utils/date-time";
 //import RouteTest from "./RouteTestComp";
 import NewReservation from "./reservations/NewReservation";
 import NewTable from "./tables/NewTable.js";
+import Seat from "./seatReservation/Seat.js";
 
 
 /**
@@ -26,6 +27,9 @@ function Routes() {
       </Route>
       <Route exact path="/reservations/new">
         <NewReservation />
+      </Route>
+      <Route path="/reservations/:reservationId/seat">
+        <Seat />
       </Route>
       <Route path="/dashboard">
         <Dashboard date={today()} />

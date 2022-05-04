@@ -7,7 +7,6 @@ function TablesTable({tables}) {
 //map array to fill table
 // add buttons
 // change the db to manipulate the FK on res, and use it to do the rest UNLESS jest insists on a TBALES col.
-
     if(tables) {
         return (
             <table>
@@ -22,20 +21,21 @@ function TablesTable({tables}) {
                 <tbody>
                 {tables.map(table =>{
                     return (
-                    <tr key={table.table_id}>
-                        <td>
-                            {table.table_name}
-                        </td>
-                        <td>
-                            {table.capacity}
-                        </td>
-                        <td>
-                            to be determed
-                        </td>
-                        <td>
-                            to be determed
-                        </td>
-                    </tr>
+                        <tr key={table.table_id}>
+                            <td>
+                                {table.table_name}
+                            </td>
+                            <td>
+                                {table.capacity}
+                            </td>
+                            <td>
+                                {table.occupied?(<span data-table-id-status={`${table.table_id}`}>Occupided</span>):
+                                (<span data-table-id-status={`${table.table_id}`}>Free</span>)}
+                            </td>
+                            <td>
+                                to be determed
+                            </td>
+                        </tr>
                     ) 
                 })}
                 </tbody>

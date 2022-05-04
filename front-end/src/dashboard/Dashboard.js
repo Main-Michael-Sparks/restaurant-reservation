@@ -17,28 +17,28 @@ function Dashboard({ date }) {
   const [apiError, setApiError] = useState(null);
   const [newDate, setNewDate] = useState()
   const query = useQuery();
-  const searchDate = query.get("date")
-  console.log("tables", tables)
+  const searchDate = query.get("date");
    // react dep [date] omitted to prevent loop; Render once on the value of useQuery()
    useEffect(()=>{
     if(searchDate){
       return setNewDate(searchDate);
     }
     setNewDate(date)
-  },[searchDate]) 
+  },[searchDate]);
 
   const dayButtonHandler = ({ target }) => {
 
     if(target.name === "previous"){
-      setNewDate(previous(newDate))
-    }
+      setNewDate(previous(newDate));
+    };
+
     if(target.name === "next"){
-      setNewDate(next(newDate))
-    }
+      setNewDate(next(newDate));
+    };
 
     if(target.name === "today"){
-      setNewDate(today(newDate))
-    }
+      setNewDate(today(newDate));
+    };
   };
 
   useEffect(loadDashboard, [newDate,date]);
@@ -46,7 +46,7 @@ function Dashboard({ date }) {
     const dateObj = {"date": date}
     if(newDate){
       dateObj.date = newDate
-    }
+    };
     const abortController = new AbortController();
     setApiError(null);
     listReservations(dateObj , abortController.signal)
@@ -57,18 +57,15 @@ function Dashboard({ date }) {
 
   useEffect(loadTables,[]);
   function loadTables(){
-    console.log("load tables envoked")
     const abortController  = new AbortController();
     setApiError(null);
     listTables(abortController.signal)
       .then(tableData => {
-          console.log("response from API", tableData)
-          return setTables([tableData]);
+          return setTables(tableData);
       })
       .catch(setApiError)
     return () => abortController.abort();
   };
-   console.log(reservations)
   return (
     <main>
       <h1>Dashboard</h1>
