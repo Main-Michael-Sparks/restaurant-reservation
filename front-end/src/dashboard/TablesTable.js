@@ -20,9 +20,9 @@ function TablesTable({tables}) {
                     </tr>
                 </thead>
                 <tbody>
-                {tables.map((table, index) =>{
+                {tables.map(table =>{
                     return (
-                    <tr key={index}>
+                    <tr key={table.table_id}>
                         <td>
                             {table.table_name}
                         </td>

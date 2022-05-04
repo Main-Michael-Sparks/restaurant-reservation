@@ -18,9 +18,9 @@ function ReservationTable({reservations}) {
                 </thead>
                 <tbody>
         {reservations && reservations.length == 0?(<tr><td colSpan={7}>No Reservations for date specified..</td></tr>): null}
-        {reservations.map((reservation, index) =>{
+        {reservations.map(reservation =>{
             return (
-              <tr key={index}>
+              <tr key={reservation.reservation_id}>
                   <td>
                     {reservation.first_name}
                   </td>
