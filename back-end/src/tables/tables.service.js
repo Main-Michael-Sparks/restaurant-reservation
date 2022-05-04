@@ -3,8 +3,8 @@ const knex = require("../db/connection.js")
 
 function list(){
     return knex("tables")
-        .select("*")
-        .orderBy("table_name");
+        .leftJoin("reservations", "reservations.table_id", "tables.table_id")
+        .select("tables.table_id","tables.table_name","tables.capacity", "reservations.reservation_id as occupied")
 }
 
 function create(table) {

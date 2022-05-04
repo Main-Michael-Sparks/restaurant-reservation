@@ -1,4 +1,5 @@
 import React  from "react";
+import {Link} from "react-router-dom"
 
 function ReservationTable({reservations}) {
 
@@ -40,7 +41,7 @@ function ReservationTable({reservations}) {
                     {reservation.people}
                   </td>
                   <td>
-                    to be determed
+                    <Link to={`/reservations/${reservation.reservation_id}/seat`}><button type="button">Seat</button></Link>
                   </td>
               </tr>
             ) 

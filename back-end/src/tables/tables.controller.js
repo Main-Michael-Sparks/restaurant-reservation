@@ -40,7 +40,6 @@ async function list(req, res, next){
     res.json({ data })
 };
 
-
 async function create(req, res, next){
     const { table } = res.locals;
     table.seated = false; //come back and deal with this properly
@@ -48,8 +47,6 @@ async function create(req, res, next){
     console.log(data)
     res.status(201).json({ data })
 };
-
-
 
 module.exports = {
     list,

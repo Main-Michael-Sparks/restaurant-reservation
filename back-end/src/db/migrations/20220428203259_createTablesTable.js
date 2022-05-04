@@ -4,7 +4,6 @@ exports.up = function(knex) {
         table.increments("table_id").primary();
         table.string("table_name").notNullable();
         table.integer("capacity").unsigned().notNullable();
-        table.bool("seated");
         table.timestamps(true,true);
     })
   
