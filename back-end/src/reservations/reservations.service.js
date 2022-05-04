@@ -8,16 +8,26 @@ function create(newRes){
         .then(returnRes=>returnRes[0]);
 };
 
-function read( reservation_date ) {
-    return knex(resTable)
-        .select("*")
-        .where({ reservation_date })
-        .orderBy('reservation_time');
+function read( search, searchFor="" ) {
 
-}
+    if(searchFor === "date") {
+        return knex(resTable)
+            .select("*")
+            .where({ "reservation_date": search })
+            .orderBy('reservation_time');
+    };
+
+    if(searchFor === "reservationId"){
+        return knex(resTable)
+            .select("*")
+            .where({ "reservation_id": search })
+            .first();
+    };
+    
+};
 
 
 module.exports = {
     create,
-    read
+    read,
 }

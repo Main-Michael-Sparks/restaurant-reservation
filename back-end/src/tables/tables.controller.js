@@ -35,6 +35,8 @@ function validTableData(req, res, next) {
     return next();
 };
 
+
+
 async function list(req, res, next){
     const data = await service.list();
     res.json({ data })
@@ -42,7 +44,6 @@ async function list(req, res, next){
 
 async function create(req, res, next){
     const { table } = res.locals;
-    table.seated = false; //come back and deal with this properly
     const data = await service.create(table)
     console.log(data)
     res.status(201).json({ data })

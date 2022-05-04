@@ -110,10 +110,31 @@ function validReserTime(req, res, next){
   return next()
 }
 
+async function validReserId(req,res,next){
+
+  const { reservationId } = req.params;
+  const reservation = await service.read(reservationId, "reservationId");
+  
+  if (reservation) {
+    res.locals.reservation = reservation
+    return next()
+  }
+
+  next({
+    status: 404,
+    message: `there is no reservation with reservationId: ${reservationId}`
+  })
+
+}
+
+function read(req, res, next){
+  res.json({ data: res.locals.reservation })
+};
+
 
 async function list(req, res, _next) {
   const reservation_date = req.query.date;
-  const resDates = await service.read(reservation_date);
+  const resDates = await service.read(reservation_date, "date");
   res.json({ data: resDates });
 }
 
@@ -124,5 +145,6 @@ async function create(req, res, _next){
 }
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [validReser,validReserDate,validReserFormat,vaildReserFuture,validReserCloseDate,validReserTime,asyncErrorBoundary(create)]
+  create: [validReser,validReserDate,validReserFormat,vaildReserFuture,validReserCloseDate,validReserTime,asyncErrorBoundary(create)],
+  read: [asyncErrorBoundary(validReserId), read]
 };
