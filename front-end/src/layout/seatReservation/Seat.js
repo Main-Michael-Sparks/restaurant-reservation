@@ -1,7 +1,7 @@
 import React from "react";
 import {useState, useEffect} from "react"
 import { useParams,useHistory } from "react-router";
-import { listTables, readReservation } from "../../utils/api";
+import { listTables, readReservation, seatTable } from "../../utils/api";
 import ErrorAlert from "../ErrorAlert.js"
 
 function Seat(){
@@ -103,7 +103,14 @@ function Seat(){
                     message: "selected table is not big enough for reservation size"
                 }])
             }
+
+            if(selectedTable && selectedTable.occupied){
+                setDisplayError([{
+                    message: "selected table is already occupied"
+                }])
+            }
             setDataValidtionComplete(true)
+
         };
     },[dataValidationStage,dataToValidate])
 
@@ -143,12 +150,24 @@ function Seat(){
     },[dataIsValid]);
 
 
-    //console.log API for testing validated data send off
     useEffect(()=>{
         if(dataToPost){
-            console.log("validated data is ready to send", dataToPost)
+            const abortController = new AbortController();
+            const data = {
+                reservation_id: dataToPost.reservation_id
+            }
+            seatTable(dataToPost.table_id,data,abortController.signal)
+                .then(() =>{
+                    setDataToPost(null);
+                    history.push(`/dashboard`);
+                })
+                .catch(error=>{
+                    setDisplayError([error])
+                    setActiveErrorState(true);
+                });
+            return () => abortController.abort()
         }
-    },[dataToPost])
+    },[dataToPost,history]);
 
     return (
         <div>
