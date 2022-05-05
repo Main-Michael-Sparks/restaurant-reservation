@@ -27,7 +27,7 @@ function validTableData(req, res, next) {
         return next(errorObj);
     };
 
-    if(isNaN(res.locals.table.capacity)){
+    if(!(res.locals.table.capacity === Number(res.locals.table.capacity))){
         errorObj.message = "capacity must be a numer";
         return next(errorObj);
     };
@@ -69,16 +69,30 @@ async function validTableSeatReserId(req, res, next){
 
 async function validTableSeat(req, res, next){
     //first union is tables, the second is reservations
-    const resrTblChk = await service.read(res.locals.seatTable)
-    if(resrTblChk[0].table_capacity < resrTblChk[1].table_capacity){
+    const resrTblChk = await service.read(res.locals.seatTable);
+    res.locals.tblChk = {
+        "table_id": res.locals.seatTable.table_id
+    };
+    
+    const tblChk = await service.read(res.locals.tblChk);
+
+    if(resrTblChk[0].capacity < resrTblChk[1].capacity){
         return next({
             status: 400,
             message: "table does not have enough capacity for reservation"
         });
     };
 
-    //must be explicitly not null (not just truthy or falsy)
+    //must be explicitly not null (not just truthy or falsy) reservation has a table assigned.
     if(resrTblChk[1].occupied !== null) {
+        return next({
+            status: 400,
+            message: "table is currently occupied"
+        });
+    };
+
+    // checks if table is already assigned
+    if(tblChk) {
         return next({
             status: 400,
             message: "table is currently occupied"

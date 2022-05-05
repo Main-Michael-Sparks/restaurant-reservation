@@ -3,7 +3,8 @@ const knex = require("../db/connection.js")
 
 
 function read(idPack){
-    if (idPack.table_id) {
+
+    if (idPack.table_id && idPack.reservation_id) {
         return knex("tables")
             .select("capacity","table_id as occupied")
             .where({
@@ -23,6 +24,13 @@ function read(idPack){
             .select("*")
             .where({"reservation_id": idPack.reservation_id})
             .first();
+    };
+    
+    if(!idPack.reservation_id){
+        return knex("reservations")
+            .select("*")
+            .where({"table_id": idPack.table_id})
+            .first()
     };
 }
 
