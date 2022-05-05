@@ -1,8 +1,9 @@
 import React  from "react";
+import {Link} from "react-router-dom"
 
 function ReservationTable({reservations}) {
 
-    if (reservations.length) {
+    if (reservations) {
         return (
             <table>
                 <thead>
@@ -13,12 +14,14 @@ function ReservationTable({reservations}) {
                         <th>Reservation Date</th>
                         <th>Reservation Time</th>
                         <th>Number of People</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
-        {reservations.map((reservation, index) =>{
+        {reservations && reservations.length == 0?(<tr><td colSpan={7}>No Reservations for date specified..</td></tr>): null}
+        {reservations.map(reservation =>{
             return (
-              <tr key={index}>
+              <tr key={reservation.reservation_id}>
                   <td>
                     {reservation.first_name}
                   </td>
@@ -36,6 +39,10 @@ function ReservationTable({reservations}) {
                   </td>
                   <td>
                     {reservation.people}
+                  </td>
+                  <td>
+                    {/* use  ternary to deal with currently seated if FK table_id is null: display button */}
+                    <Link to={`/reservations/${reservation.reservation_id}/seat`}><button type="button">Seat</button></Link>
                   </td>
               </tr>
             ) 
