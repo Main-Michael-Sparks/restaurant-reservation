@@ -65,8 +65,6 @@ function NewTable(){
         });
 
         setDataValidationStage(true)
-        console.log("data to validate", dataToValidate)
-        console.log("data validation stage", dataValidationStage)
 
     };
 
