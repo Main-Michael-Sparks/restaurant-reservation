@@ -86,7 +86,7 @@ function create(table) {
 function destory(table_id) {
    return knex("reservations")
     .update({ "table_id": null,
-                "status": "finished"
+            "status": "finished"
     },["*"])
     .where({ table_id });
 };
