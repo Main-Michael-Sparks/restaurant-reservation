@@ -6,9 +6,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary.js")
  */
 
 function validReser(req, res, next) {
-  // refactor for muliple errors
-  // pass down an array nest errors?
-  // use a helper function to validate object props
+
       const errorObj = {status: 400, message:''}
 
       if (!req.body.data) {
@@ -43,12 +41,20 @@ function validReser(req, res, next) {
         errorObj.message = 'Reservation must have reservation_date'
         return next(errorObj)
       }
+
       if(!res.locals.reservation.people || 
         !Number.isInteger(res.locals.reservation.people) || 
         res.locals.reservation.people < 1 ){
         errorObj.message = 'Reservation must have some number of people'
         return next(errorObj)
       }
+
+      if(res.locals.reservation.status && 
+        (res.locals.reservation.status === "seated" || 
+        res.locals.reservation.status === "finished")) {
+          errorObj.message = ` reservation status: ${res.locals.reservation.status} cannot be seated or finished`;
+          return next(errorObj)
+        }
    return next()
 }
 
@@ -127,6 +133,40 @@ async function validReserId(req,res,next){
 
 }
 
+function validStatus(req, res, next){
+  const acceptStatus = ["booked","seated","finished"];
+  if(req.body.data){
+    res.locals.status = req.body.data
+  } else {
+    return next({
+      status: 400,
+      message: "Request body must have data key"
+    });
+  };
+
+  if(!(res.locals.status.status === acceptStatus.find(status=>res.locals.status.status === status))){
+    return next({
+      status: 400,
+      message: `status: ${res.locals.status.status} is not acceptable`
+    });
+  };
+
+  if(res.locals.reservation.status === "finished") {
+    return next({
+      status: 400,
+      message: `status: ${res.locals.reservation.status} cannot be updated`
+    })
+  };
+
+  return next();
+}
+
+async function update(req, res, next){
+
+  const data = await service.update(res.locals.reservation.reservation_id, res.locals.status.status )
+  res.status(200).json({ data })
+}
+
 function read(req, res, next){
   res.json({ data: res.locals.reservation })
 };
@@ -146,5 +186,6 @@ async function create(req, res, _next){
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validReser,validReserDate,validReserFormat,vaildReserFuture,validReserCloseDate,validReserTime,asyncErrorBoundary(create)],
-  read: [asyncErrorBoundary(validReserId), read]
+  read: [asyncErrorBoundary(validReserId), read],
+  update: [asyncErrorBoundary(validReserId),validStatus,asyncErrorBoundary(update)]
 };

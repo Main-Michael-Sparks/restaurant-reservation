@@ -48,9 +48,10 @@ function list(table_id){
 
 
 function update(idPack){
-    console.log("from update",idPack)
     return knex("reservations")
-        .update({ "table_id" : idPack.table_id }, ["*"])
+        .update({ "table_id" : idPack.table_id,
+                "status":"seated"
+        }, ["*"])
         .where({"reservation_id": idPack.reservation_id});
 };
 
@@ -84,7 +85,9 @@ function create(table) {
 
 function destory(table_id) {
    return knex("reservations")
-    .update({ "table_id": null },["*"])
+    .update({ "table_id": null,
+            "status": "finished"
+    },["*"])
     .where({ table_id });
 };
 

@@ -14,7 +14,7 @@ import {next, today, previous} from "../utils/date-time"
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
-  const [reloadTables, setReloadTables] = useState(null)
+  const [reloadResTbls, setReloadResTbls] = useState(null)
   const [tableFinishId, setTableFinishId] = useState();
   const [callDelApi, setCallDelApi] = useState(null);
   const [apiError, setApiError] = useState(null);
@@ -45,7 +45,7 @@ function Dashboard({ date }) {
     };
   };
 
-  useEffect(loadDashboard, [newDate,date]);
+  useEffect(loadDashboard, [newDate,date,reloadResTbls]);
   function loadDashboard() {
     const dateObj = {"date": date}
     if(newDate){
@@ -54,19 +54,20 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     setApiError(null);
     listReservations(dateObj , abortController.signal)
-      .then(setReservations)
+      .then( data => {
+        setReservations(data.filter(res=> res.status != "finished"))
+      })
       .catch(error=> setApiError([error]));
     return () => abortController.abort();
   }
-
-  useEffect(loadTables,[reloadTables]);
+  useEffect(loadTables,[reloadResTbls]);
   function loadTables(){
     const abortController  = new AbortController();
     setApiError(null);
     listTables(abortController.signal)
       .then(tableData => {
           setTables(tableData);
-          setReloadTables(false);
+          setReloadResTbls(false);
       })
       .catch(error=> setApiError([error]));
     return () => abortController.abort();
@@ -81,7 +82,7 @@ function Dashboard({ date }) {
         .then(()=>{
           setCallDelApi(null)
           setTableFinishId(null)
-          setReloadTables(true)
+          setReloadResTbls(true)
         })
         .catch(error=> setApiError([error]));
       return () => abortController.abort();

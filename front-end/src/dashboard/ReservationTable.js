@@ -41,8 +41,10 @@ function ReservationTable({reservations}) {
                     {reservation.people}
                   </td>
                   <td>
-                    {/* use  ternary to deal with currently seated if FK table_id is null: display button */}
-                    <Link to={`/reservations/${reservation.reservation_id}/seat`}><button type="button">Seat</button></Link>
+                    {
+                      reservation.status === "booked"?(<><span data-reservation-id-status={reservation.reservation_id}>booked</span> <Link to={`/reservations/${reservation.reservation_id}/seat`}><button type="button">Seat</button></Link></>):
+                      reservation.status ==="seated"?(<span data-reservation-id-status={reservation.reservation_id}>seated</span>):null
+                    }
                   </td>
               </tr>
             ) 

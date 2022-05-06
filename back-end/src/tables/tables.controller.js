@@ -87,7 +87,7 @@ async function validTableSeat(req, res, next){
     if(resrTblChk[1].occupied !== null) {
         return next({
             status: 400,
-            message: "table is currently occupied"
+            message: "reservation is currently seated and table is occupied"
         });
     };
 
