@@ -30,11 +30,17 @@ function read(idPack){
         return knex("reservations")
             .select("*")
             .where({"table_id": idPack.table_id})
-            .first()
+            .first();
     };
-}
+};
 
-function list(){
+function list(table_id){
+    if(table_id){
+        return knex("tables")
+            .select("*")
+            .where({ table_id })
+            .first()
+    }
     return knex("tables")
         .leftJoin("reservations", "reservations.table_id", "tables.table_id")
         .select("tables.table_id","tables.table_name","tables.capacity", "reservations.reservation_id as occupied")
@@ -51,12 +57,18 @@ function update(idPack){
     return knex("reservations")
         .update({ "table_id" : idPack.table_id }, ["*"])
         .where({"reservation_id": idPack.reservation_id})
-}
+};
 
+function destory(table_id) {
+    knex("reservations")
+    .update({ "table_id":null })
+    .where({ table_id })
+    
+};
 
 module.exports = {
     create,
     list,
     read,
     update
-}
+};
