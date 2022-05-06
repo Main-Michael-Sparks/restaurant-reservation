@@ -14,6 +14,7 @@ function read( search, searchFor="" ) {
         return knex(resTable)
             .select("*")
             .where({ "reservation_date": search })
+            .andWhereNot({"status": "finished"})
             .orderBy('reservation_time');
     };
 
@@ -26,8 +27,16 @@ function read( search, searchFor="" ) {
     
 };
 
+function update(reservation_id,status){
+    console.log("update executed")
+    return knex("reservations")
+        .update({"status": status}, ["*"])
+        .where({"reservation_id": reservation_id})
+}
+
 
 module.exports = {
     create,
     read,
+    update
 }
