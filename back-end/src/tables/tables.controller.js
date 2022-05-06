@@ -139,7 +139,7 @@ async function list(req, res, next){
 async function create(req, res, next){
     const { table } = res.locals;
     const data = await service.create(table)
-    console.log(data)
+    console.log("from create",data)
     res.status(201).json({ data })
 };
 

@@ -27,8 +27,8 @@ function TablesTable({tables, finishHandler}) {
                                 {table.capacity}
                             </td>
                             <td>
-                                {table.occupied?(<span data-table-id-status={`${table.table_id}`}>Occupided</span>):
-                                (<span data-table-id-status={`${table.table_id}`}>Free</span>)}
+                                {table.occupied?(<span data-table-id-status={table.table_id}>occupied</span>):
+                                (<span data-table-id-status={table.table_id}>free</span>)}
                             </td>
                             <td>
                                 {table.occupied?(<button data-table-id-finish={table.table_id} name="finished" onClick={()=>finishHandler(table.table_id)}>Finish</button>): null}
