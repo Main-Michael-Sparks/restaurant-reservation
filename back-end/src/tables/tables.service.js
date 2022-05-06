@@ -3,7 +3,6 @@ const knex = require("../db/connection.js")
 
 
 function read(idPack){
-
     if (idPack.table_id && idPack.reservation_id) {
         return knex("tables")
             .select("capacity","table_id as occupied")
@@ -30,33 +29,69 @@ function read(idPack){
         return knex("reservations")
             .select("*")
             .where({"table_id": idPack.table_id})
-            .first()
+            .first();
     };
-}
+};
 
-function list(){
+function list(table_id){
+    if(table_id){
+        return knex("tables")
+            .select("*")
+            .where({ table_id })
+            .first();
+    };
     return knex("tables")
         .leftJoin("reservations", "reservations.table_id", "tables.table_id")
         .select("tables.table_id","tables.table_name","tables.capacity", "reservations.reservation_id as occupied")
         .orderBy("tables.table_name");
 };
 
+
+function update(idPack){
+    console.log("from update",idPack)
+    return knex("reservations")
+        .update({ "table_id" : idPack.table_id }, ["*"])
+        .where({"reservation_id": idPack.reservation_id});
+};
+
 function create(table) {
+
+    //if statement added for frontend jest test #5 API call
+    if(table.reservation_id){
+        const newTable = {
+            table_name:table.table_name,
+            capacity:table.capacity
+        }
+       return knex("tables")
+        .insert(newTable,["*"])
+        .then((resTbl)=>{
+            const idPack = {
+                "table_id": resTbl[0].table_id,
+                "reservation_id": table.reservation_id
+            }
+            resTbl[1] = idPack;
+           return resTbl
+        })
+        .then(resTbl => {
+            return update(resTbl[1]).then(()=>resTbl[0]);
+        });
+    };
+
     return knex("tables")
         .insert(table, ['*'])
         .then(newTable => newTable[0]);
 };
 
-function update(idPack){
-    return knex("reservations")
-        .update({ "table_id" : idPack.table_id }, ["*"])
-        .where({"reservation_id": idPack.reservation_id})
-}
-
+function destory(table_id) {
+   return knex("reservations")
+    .update({ "table_id": null },["*"])
+    .where({ table_id });
+};
 
 module.exports = {
     create,
     list,
     read,
-    update
-}
+    update,
+    destory
+};

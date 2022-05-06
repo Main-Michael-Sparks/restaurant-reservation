@@ -101,6 +101,32 @@ async function validTableSeat(req, res, next){
     return next();
 }
 
+async function validTable(req, res, next){
+    res.locals.table_id = req.params.table_id
+    const table = await service.list(res.locals.table_id)
+
+    if(!table) {
+        return next({
+            status: 404,
+            message: `table_id: ${res.locals.table_id} was not found`
+        })
+    };
+    return next();
+};
+
+async function isTblOcc(req, res, next){
+
+    const isOccupied = await service.read(res.locals);
+    
+    if(!isOccupied) {
+        return next({
+            status: 400,
+            message: "Table is currently not occupied "
+        });
+    };
+    return next()
+};
+
 async function update(req, res, next){
     const data = await service.update(res.locals.seatTable)
     res.status(200).json({ data });
@@ -114,12 +140,17 @@ async function list(req, res, next){
 async function create(req, res, next){
     const { table } = res.locals;
     const data = await service.create(table)
-    console.log(data)
     res.status(201).json({ data })
 };
+
+async function distroy(req, res, next){
+    const data = await service.destory(res.locals.table_id)
+    res.status(200).json({ data })
+}
 
 module.exports = {
     list,
     create:[validTableData,asyncErrorBoundary(create)],
-    update:[validTableSeatData, asyncErrorBoundary(validTableSeatReserId), asyncErrorBoundary(validTableSeat), asyncErrorBoundary(update)]
+    update:[validTableSeatData, asyncErrorBoundary(validTableSeatReserId), asyncErrorBoundary(validTableSeat), asyncErrorBoundary(update)],
+    delete:[asyncErrorBoundary(validTable),asyncErrorBoundary(isTblOcc),asyncErrorBoundary(distroy)]
 }

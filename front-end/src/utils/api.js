@@ -124,6 +124,17 @@ export async function seatTable(tableId,data,signal){
     body: JSON.stringify({ data }),
     signal
   };
-  console.log("payload", payload)
   return await fetchJson(url,payload,[]);
-}
+};
+
+export async function delTblSeat(tableId, signal){
+  console.log("api table Id", tableId)
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const payload = {
+    method: "DELETE",
+    headers,
+    signal
+  };
+  return await fetchJson(url,payload,[])
+};
+

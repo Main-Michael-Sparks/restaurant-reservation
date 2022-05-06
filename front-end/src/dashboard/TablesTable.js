@@ -2,11 +2,9 @@ import React from "react";
 
 
 
-function TablesTable({tables}) {
-//write jsx table
-//map array to fill table
-// add buttons
-// change the db to manipulate the FK on res, and use it to do the rest UNLESS jest insists on a TBALES col.
+function TablesTable({tables, finishHandler}) {
+
+
     if(tables) {
         return (
             <table>
@@ -29,11 +27,11 @@ function TablesTable({tables}) {
                                 {table.capacity}
                             </td>
                             <td>
-                                {table.occupied?(<span data-table-id-status={`${table.table_id}`}>Occupided</span>):
-                                (<span data-table-id-status={`${table.table_id}`}>Free</span>)}
+                                {table.occupied?(<span data-table-id-status={table.table_id}>occupied</span>):
+                                (<span data-table-id-status={table.table_id}>free</span>)}
                             </td>
                             <td>
-                                to be determed
+                                {table.occupied?(<button data-table-id-finish={table.table_id} name="finished" onClick={()=>finishHandler(table.table_id)}>Finish</button>): null}
                             </td>
                         </tr>
                     ) 

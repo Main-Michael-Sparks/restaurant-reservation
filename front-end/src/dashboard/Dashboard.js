@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, delTblSeat } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import ReservationTable from "./ReservationTable"
@@ -13,11 +13,15 @@ import {next, today, previous} from "../utils/date-time"
  */
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
-  const [tables, setTables] = useState([])
+  const [tables, setTables] = useState([]);
+  const [reloadTables, setReloadTables] = useState(null)
+  const [tableFinishId, setTableFinishId] = useState();
+  const [callDelApi, setCallDelApi] = useState(null);
   const [apiError, setApiError] = useState(null);
-  const [newDate, setNewDate] = useState()
+  const [newDate, setNewDate] = useState();
   const query = useQuery();
   const searchDate = query.get("date");
+
    // react dep [date] omitted to prevent loop; Render once on the value of useQuery()
    useEffect(()=>{
     if(searchDate){
@@ -51,21 +55,47 @@ function Dashboard({ date }) {
     setApiError(null);
     listReservations(dateObj , abortController.signal)
       .then(setReservations)
-      .catch(setApiError);
+      .catch(error=> setApiError([error]));
     return () => abortController.abort();
   }
 
-  useEffect(loadTables,[]);
+  useEffect(loadTables,[reloadTables]);
   function loadTables(){
     const abortController  = new AbortController();
     setApiError(null);
     listTables(abortController.signal)
       .then(tableData => {
-          return setTables(tableData);
+          setTables(tableData);
+          setReloadTables(false);
       })
-      .catch(setApiError)
+      .catch(error=> setApiError([error]));
     return () => abortController.abort();
   };
+
+  // delete table assignment
+  useEffect(()=>{
+    if(callDelApi){
+      const abortController  = new AbortController();
+      setApiError(null);
+      delTblSeat(tableFinishId,abortController.signal)
+        .then(()=>{
+          setCallDelApi(null)
+          setTableFinishId(null)
+          setReloadTables(true)
+        })
+        .catch(error=> setApiError([error]));
+      return () => abortController.abort();
+    }
+  },[callDelApi,tableFinishId]);
+
+   // need a click handler, a popup, an api call and reRender.
+   const finishHandler = (table_id) => {
+    if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")){
+        setTableFinishId(table_id)
+        setCallDelApi(true)
+    } 
+   };
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -74,7 +104,7 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={apiError} />
       <div>
-      <TablesTable tables={tables} />
+      <TablesTable tables={tables} finishHandler={finishHandler} />
       </div>
       <div>
       <ReservationTable reservations={reservations} />
