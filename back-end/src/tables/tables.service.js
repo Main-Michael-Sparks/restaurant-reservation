@@ -3,7 +3,6 @@ const knex = require("../db/connection.js")
 
 
 function read(idPack){
-
     if (idPack.table_id && idPack.reservation_id) {
         return knex("tables")
             .select("capacity","table_id as occupied")
@@ -60,15 +59,15 @@ function update(idPack){
 };
 
 function destory(table_id) {
-    knex("reservations")
-    .update({ "table_id":null })
-    .where({ table_id })
-    
+   return knex("reservations")
+    .update({ "table_id": null },["*"])
+    .where({ table_id });
 };
 
 module.exports = {
     create,
     list,
     read,
-    update
+    update,
+    destory
 };

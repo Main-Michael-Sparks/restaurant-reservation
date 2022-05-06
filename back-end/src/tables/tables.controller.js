@@ -103,7 +103,7 @@ async function validTableSeat(req, res, next){
 
 async function isTblOcc(req, res, next){
     res.locals.table_id = req.params.table_id
-    const isOccupied = await service.read(res.locals.table_id);
+    const isOccupied = await service.read(res.locals);
     
     if(!isOccupied) {
         return next({
@@ -144,8 +144,8 @@ async function create(req, res, next){
 };
 
 async function distroy(req, res, next){
-    const delTblSeat = await service.destory(res.locals.table_id)
-    res.sendStatus(200);
+    const data = await service.destory(res.locals.table_id)
+    res.status(200).json({ data })
 }
 
 module.exports = {

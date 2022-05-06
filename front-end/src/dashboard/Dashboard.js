@@ -14,6 +14,7 @@ import {next, today, previous} from "../utils/date-time"
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
+  const [reloadTables, setReloadTables] = useState(null)
   const [tableFinishId, setTableFinishId] = useState();
   const [callDelApi, setCallDelApi] = useState(null);
   const [apiError, setApiError] = useState(null);
@@ -58,13 +59,14 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  useEffect(loadTables,[]);
+  useEffect(loadTables,[reloadTables]);
   function loadTables(){
     const abortController  = new AbortController();
     setApiError(null);
     listTables(abortController.signal)
       .then(tableData => {
-          return setTables(tableData);
+          setTables(tableData);
+          setReloadTables(false);
       })
       .catch(error=> setApiError([error]));
     return () => abortController.abort();
@@ -79,12 +81,12 @@ function Dashboard({ date }) {
         .then(()=>{
           setCallDelApi(null)
           setTableFinishId(null)
+          setReloadTables(true)
         })
         .catch(error=> setApiError([error]));
       return () => abortController.abort();
     }
   },[callDelApi,tableFinishId]);
-  console.log(apiError)
 
    // need a click handler, a popup, an api call and reRender.
    const finishHandler = (table_id) => {
