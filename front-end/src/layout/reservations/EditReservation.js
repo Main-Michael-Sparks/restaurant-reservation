@@ -7,11 +7,7 @@ import { readReservation, updateReservation } from "../../utils/api";
 
 
 function EditReservation(){
- //PROPS FOR RESFORM
- //formData={formData} formChangeHandler={formChangeHandler} formSubmitHandler={formSubmitHandler}  cancelHandler={cancelHandler}
- // GET /reservations/:reservationID
- // PUT /reservations/:resrvationsID
- // copy-paste create validation/functionaility
+
     const initForm = {
 
         first_name: "",
@@ -21,12 +17,14 @@ function EditReservation(){
         reservation_time: "",
         people: "",
     }
+
     const [formData, setFormData] = useState(initForm);
-    const [dataToPut, setDataToPut] = useState(null)
-    const [apiErrors, setApiErrors] = useState(null)
+    const [dataToPut, setDataToPut] = useState(null);
+    const [sendUpdate, setSendUpdate] = useState(null);
+    const [apiErrors, setApiErrors] = useState(null);
     const history = useHistory();
     const { reservationId } = useParams();
-    
+
     //API GET request for reservation to edit 
     useEffect(()=>{
         const abortController = new AbortController();
@@ -37,22 +35,28 @@ function EditReservation(){
         return () => abortController.abort()
     },[reservationId])
 
+    //API PUT request for reservation to update
+    useEffect(()=>{
+        if(sendUpdate){
+            const abortController = new AbortController();
+            setApiErrors(null);
+            updateReservation(reservationId,dataToPut,abortController.signal)
+                .then(() =>{
+                    setFormData(initForm);
+                    setDataToPut(null);
+                    setSendUpdate(null);
+                    return history.goBack();
+                })
+                .catch(error=>setApiErrors([error]));
+            return () => abortController.abort()
+        }
+    },[sendUpdate,dataToPut])
+
+    // form submit handler
     const formSubmitHandler = (event) => {
         event.preventDefault();
-      /*  if(errorsComplete){
-            setActiveErrorState(false);
-            setErrorHandover(null);
-            setErrorsComplete(null);
-            setDataValidationStage(false);
-            setDataValidtionComplete(false);
-            setErrorsComplete(null)
-         };
-
-        setDataToValidate({...formData,
-             people: Number(formData.people)
-        });
-
-        setDataValidationStage(true) */
+        setDataToPut(formData)
+        setSendUpdate(true)
     };
 
      // cancel button handler
@@ -76,7 +80,6 @@ function EditReservation(){
         };
     };
 
-    
     return (
         <div>
         <h1>Edit Reservation</h1>
