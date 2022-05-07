@@ -64,7 +64,6 @@ export async function listReservations(params, signal) {
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
-  console.log("from API", url)
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
@@ -129,7 +128,6 @@ export async function seatTable(tableId,data,signal){
 };
 
 export async function delTblSeat(tableId, signal){
-  console.log("api table Id", tableId)
   const url = `${API_BASE_URL}/tables/${tableId}/seat`;
   const payload = {
     method: "DELETE",
