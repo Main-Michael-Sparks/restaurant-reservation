@@ -17,7 +17,6 @@ function NewReservation(){
         reservation_date: "",
         reservation_time: "",
         people: "",
-
     };
     const initValidForm = {
         first_name: "",
@@ -215,7 +214,7 @@ function NewReservation(){
         <div>
             <h1>Create New Reservation</h1>
             { activeErrorState && errorHandover?<ErrorAlert error={errorHandover}/>: null }
-            <ReservationForm formData={formData} formChangeHandler={formChangeHandler} formSubmitHandler={formSubmitHandler}  cancelHandler={cancelHandler}/>
+            <ReservationForm formData={formData} formChangeHandler={formChangeHandler} formSubmitHandler={formSubmitHandler} cancelHandler={cancelHandler}/>
         </div>
     )
 
