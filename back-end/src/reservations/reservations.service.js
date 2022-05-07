@@ -34,11 +34,12 @@ function update(reservation_id, data, updateType=""){
             .update({"status": data}, ["*"])
             .where({"reservation_id": reservation_id})
     }
-    
+
     if(updateType === "reservation"){
         return knex("reservations")
             .update(data,["*"])
             .where({"reservation_id": reservation_id})
+            .then(res => res[0])
     }
 }
 

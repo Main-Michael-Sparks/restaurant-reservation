@@ -42,15 +42,16 @@ function EditReservation(){
             setApiErrors(null);
             updateReservation(reservationId,dataToPut,abortController.signal)
                 .then(() =>{
+                    const { reservation_date } = dataToPut;
                     setFormData(initForm);
                     setDataToPut(null);
                     setSendUpdate(null);
-                    return history.goBack();
+                    history.push(`/dashboard?date=${reservation_date}`);
                 })
                 .catch(error=>setApiErrors([error]));
-            return () => abortController.abort()
-        }
-    },[sendUpdate,dataToPut])
+            return () => abortController.abort();
+        };
+    },[sendUpdate,dataToPut]);
 
     // form submit handler
     const formSubmitHandler = (event) => {
