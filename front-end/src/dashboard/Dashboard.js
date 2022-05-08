@@ -97,7 +97,6 @@ function Dashboard({ date }) {
     if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")){
         setTableFinishId(table_id)
         setCallDelApi(true)
-        setReloadResTbls(null)
     } 
    };
 
@@ -105,7 +104,6 @@ function Dashboard({ date }) {
      if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")){
         setCanclResId(reservation_id)
         setCallResApi(true)
-        setReloadResTbls(null)
      } 
     };
 
