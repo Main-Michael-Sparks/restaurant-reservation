@@ -130,7 +130,17 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations</h4>
       </div>
+      {
+        reservations?
+        (<div>
+          <button name="previous" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Previous</button>
+          <button name="next" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Next</button>
+          <button name="today" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Today</button>
+        </div>):null
+        }
+      <div>
       <ErrorAlert error={apiError} />
+      </div>
       <div>
       <TablesTable tables={tables} finishHandler={finishHandler} />
       </div>
@@ -138,14 +148,6 @@ function Dashboard({ date }) {
       <ReservationTable reservations={reservations} cancelHandler={cancelHandler} />
       </div>
       {/*JSON.stringify(reservations)*/}
-      {
-        reservations?
-        (<div>
-          <button name="previous" onClick={dayButtonHandler}>Previous</button>
-          <button name="next" onClick={dayButtonHandler}>Next</button>
-          <button name="today" onClick={dayButtonHandler}>Today</button>
-        </div>):null
-        }
     </main>
   );
 }
