@@ -52,7 +52,8 @@ function update(idPack){
         .update({ "table_id" : idPack.table_id,
                 "status":"seated"
         }, ["*"])
-        .where({"reservation_id": idPack.reservation_id});
+        .where({"reservation_id": idPack.reservation_id})
+        .then(res=>res[0]);
 };
 
 function create(table) {
@@ -88,7 +89,8 @@ function destory(table_id) {
     .update({ "table_id": null,
             "status": "finished"
     },["*"])
-    .where({ table_id });
+    .where({ table_id })
+    .then(res=>res[0]);
 };
 
 module.exports = {
