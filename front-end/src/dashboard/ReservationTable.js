@@ -1,7 +1,8 @@
 import React  from "react";
 import {Link} from "react-router-dom"
 
-function ReservationTable({reservations}) {
+function ReservationTable({reservations, cancelHandler}) {
+
 
     if (reservations) {
         return (
@@ -49,8 +50,10 @@ function ReservationTable({reservations}) {
                         <Link to={`/reservations/${reservation.reservation_id}/edit`}>
                         <button type="button">Edit</button>
                         </Link>
+                        <button type="button" data-reservation-id-cancel={reservation.reservation_id} onClick={()=>cancelHandler(reservation.reservation_id)}>Cancel</button>
                       </>):
-                      reservation.status ==="seated"?(<span data-reservation-id-status={reservation.reservation_id}>seated</span>):null
+                      reservation.status ==="seated"?(<span data-reservation-id-status={reservation.reservation_id}>seated</span>):
+                      reservation.status === "cancelled"? ("cancelled"): null
                     }
                   </td>
               </tr>

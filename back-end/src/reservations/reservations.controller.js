@@ -186,7 +186,7 @@ function validStatus(req, res, next){
       return next()
     }
 
-  const acceptStatus = ["booked","seated","finished"];
+  const acceptStatus = ["booked","seated","finished","cancelled"];
   if(req.body.data){
     res.locals.status = req.body.data
   } else {
@@ -219,11 +219,10 @@ async function update(req, res, next){
     res.locals.data = await service.update(res.locals.reservation.reservation_id, res.locals.status.status, "status")
   }
 
-  if(res.locals.reservation){
+  if(!res.locals.status){
     const { reservationId } = req.params
     res.locals.data = await service.update(reservationId, res.locals.reservation, "reservation")
   }
-  console.log(res.locals.data)
   res.status(200).json({ data: res.locals.data })
 }
 
