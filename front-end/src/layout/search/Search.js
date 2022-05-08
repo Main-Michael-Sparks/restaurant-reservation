@@ -1,7 +1,7 @@
 import React from "react";
 import ReservationTable from "../../dashboard/ReservationTable";
 import {useEffect, useState} from "react";
-import { listReservations } from "../../utils/api";
+import { listReservations, updateReservation } from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
 
 function Search(){
@@ -17,6 +17,9 @@ function Search(){
     const [apiRes, setApiRes] = useState(null)
     const [apiError, setApiError] = useState(null)
     const [callApi, setCallApi] = useState(null)
+    const [reloadResTbls, setReloadResTbls] = useState(null)
+    const [canclResId, setCanclResId] = useState(null);
+    const [callResApi, setCallResApi] = useState(null)
 
     // captures data from user input
     const formChangeHandler = ({target}) => {
@@ -35,20 +38,49 @@ function Search(){
         setApiRes(null)
     };
 
+    // gets the search results from db
     useEffect(()=>{
-        if(callApi) {
+        if(callApi || reloadResTbls) {
         const abortController = new AbortController();
         setApiError(null);
         listReservations(dataToSend, abortController.signal)
           .then((data)=>{
               setCallApi(null)
+              setReloadResTbls(null)
               setSrchReslt(data)
               setApiRes(true)
             })
           .catch(error=> setApiError([error]));
         return () => abortController.abort();
         }
-    },[callApi,dataToSend]);
+    },[callApi,dataToSend,reloadResTbls]);
+
+    // handles cancel reservation
+    const cancelHandler = (reservation_id) => {
+        if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")){
+           setCanclResId(reservation_id)
+           setCallResApi(true)
+           setReloadResTbls(null)
+        } 
+    };
+
+    // updates reservation status
+    useEffect(()=>{
+        if(callResApi){
+          const params = `${canclResId}/status`
+          const data = { status: "cancelled" }
+          const abortController  = new AbortController();
+          setApiError(null);
+          updateReservation(params,data,abortController.signal)
+            .then(()=>{
+              setCallResApi(null)
+              setCanclResId(null)
+              setReloadResTbls(true)
+            })
+            .catch(error=> setApiError([error]));
+          return () => abortController.abort();
+        }
+      },[callResApi,canclResId]);
 
     return(
         <div>
@@ -59,7 +91,7 @@ function Search(){
                 <br />
                 <input name="mobile_number" id="mobile_number" type="text" placeholder="Enter a customer's phone number" value={formData.mobile_number} onChange={formChangeHandler} /><button type="submit">Find</button>
             </form>
-           {apiRes && srchReslt.length > 0?<ReservationTable reservations={srchReslt} />:
+           {apiRes && srchReslt.length > 0?<ReservationTable reservations={srchReslt} cancelHandler={cancelHandler} />:
            apiRes && srchReslt.length == 0? (<p>No reservations found</p>): null }
         </div>
     )

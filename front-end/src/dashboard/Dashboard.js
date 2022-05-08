@@ -57,7 +57,7 @@ function Dashboard({ date }) {
     setApiError(null);
     listReservations(dateObj , abortController.signal)
       .then( data => {
-        setReservations(data.filter(res=> res.status != "finished"))
+        setReservations(data.filter(res=> res.status === "booked" || res.status === "seated"))
       })
       .catch(error=> setApiError([error]));
     return () => abortController.abort();
