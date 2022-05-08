@@ -177,8 +177,8 @@ function Seat(){
         <form onSubmit={formSubmitHandler}>
             <label htmlFor="table_id">Table Number:</label>
             <br />
-            <select id="table_id" name="table_id" value={formData.table_id} onChange={formChangeHandler}>
-                        <option value={null} >Select a table</option>
+            <select name="table_id" id="table_id" className="form-control" aria-label="Default select" value={formData.table_id} onChange={formChangeHandler}>
+                        <option value={null}>Select a table</option>
                 {tables?tables.map(table=>{
                     return (
                         <option key={table.table_id} value={table.table_id}>{table.table_name} - {table.capacity}</option>
@@ -186,7 +186,7 @@ function Seat(){
                 }):null}
             </select>
             <br />
-            <button type="cancel" onClick={cancelHandler}>Cancel</button><button type="submit">Submit</button>
+            <button type="cancel" className="btn btn-outline-secondary" onClick={cancelHandler}>Cancel</button><button type="submit" className="btn btn-outline-secondary">Submit</button>
         </form>
         </div>
     )

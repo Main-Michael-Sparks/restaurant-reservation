@@ -128,26 +128,25 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations</h4>
+      <h4 className="mb-0">Reservations</h4>
+      </div>
+      <div>
+      <ErrorAlert error={apiError} />
       </div>
       {
         reservations?
         (<div>
           <button name="previous" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Previous</button>
-          <button name="next" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Next</button>
           <button name="today" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Today</button>
+          <button name="next" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Next</button>
         </div>):null
         }
-      <div>
-      <ErrorAlert error={apiError} />
-      </div>
       <div>
       <TablesTable tables={tables} finishHandler={finishHandler} />
       </div>
       <div>
       <ReservationTable reservations={reservations} cancelHandler={cancelHandler} />
       </div>
-      {/*JSON.stringify(reservations)*/}
     </main>
   );
 }
