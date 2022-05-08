@@ -2,7 +2,6 @@
  * Defines the base URL for the API.
  * The default values is overridden by the `API_BASE_URL` environment variable.
  */
-import { stringify } from "mocha/lib/utils";
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
@@ -85,6 +84,17 @@ export async function readReservation(params, signal) {
   const url = `${API_BASE_URL}/reservations/${params}`;
   const payload = {
     method: "GET",
+    headers,
+    signal
+  };
+  return await fetchJson(url,payload,[]);
+}
+
+export async function updateReservation(params, data, signal) {
+  const url = `${API_BASE_URL}/reservations/${params}`;
+  const payload = {
+    method: "PUT",
+    body: JSON.stringify({ data }),
     headers,
     signal
   };

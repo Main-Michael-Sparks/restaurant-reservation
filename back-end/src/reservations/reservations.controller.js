@@ -6,6 +6,13 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary.js")
  */
 
 function validReser(req, res, next) {
+      //status route passthrough
+      if(req.params.reservationId && 
+        (req.path.split("/").length === 3) && 
+        req.method === "PUT"){
+          console.log("status check passthrough successful: validReser")
+          return next()
+        }
 
       const errorObj = {status: 400, message:''}
 
@@ -48,7 +55,7 @@ function validReser(req, res, next) {
         errorObj.message = 'Reservation must have some number of people'
         return next(errorObj)
       }
-
+      //status is currently passing though may cause test break. Need to come back and deal with. 
       if(res.locals.reservation.status && 
         (res.locals.reservation.status === "seated" || 
         res.locals.reservation.status === "finished")) {
@@ -59,6 +66,15 @@ function validReser(req, res, next) {
 }
 
 function validReserDate(req, res, next){
+
+  //status route passthrough
+  if(req.params.reservationId && 
+    (req.path.split("/").length === 3) && 
+    req.method === "PUT"){
+      console.log("status check passthrough successful: validReserDate")
+      return next()
+  }
+
   const dateRegPat = /\d{4}-\d{2}-\d{2}/;
   const { reservation_date } = res.locals.reservation
   if(!reservation_date.match(dateRegPat)) {
@@ -66,7 +82,16 @@ function validReserDate(req, res, next){
   }
   return next()
 }
+
 function validReserFormat(req, res, next){
+    //status route passthrough
+  if(req.params.reservationId && 
+    (req.path.split("/").length === 3) && 
+    req.method === "PUT"){
+      console.log("status check passthrough successful: validReserFormat")
+      return next()
+  }
+
   const timeRegPat = /[0-9]{2}:[0-9]{2}/;
   const { reservation_time } = res.locals.reservation;
   if(!reservation_time.match(timeRegPat)) {
@@ -75,10 +100,15 @@ function validReserFormat(req, res, next){
   return next()
 }
 
-// /returns 400 if reservation occurs in the past
-// /returns 400 if reservation_date falls on a tuesday
 
 function vaildReserFuture(req, res, next){
+    //status route passthrough
+  if(req.params.reservationId && 
+    (req.path.split("/").length === 3) && 
+    req.method === "PUT"){
+      console.log("status check passthrough successful: validReserFuture")
+      return next()
+  }
   const {reservation_date} = res.locals.reservation;
   res.locals.currentDay = new Date(serviceDate.today());
   res.locals.reserDate = new Date(reservation_date);
@@ -90,6 +120,14 @@ function vaildReserFuture(req, res, next){
 }
 
 function validReserCloseDate(req,res,next){
+    //status route passthrough
+    if(req.params.reservationId && 
+      (req.path.split("/").length === 3) && 
+      req.method === "PUT"){
+        console.log("status check passthrough successful: validReserCloseDate")
+        return next()
+    }
+
   const {reservation_date} = res.locals.reservation;
   const reserDate = new Date(reservation_date)
   if(reserDate.getDay() === 1){
@@ -99,6 +137,13 @@ function validReserCloseDate(req,res,next){
 }
 
 function validReserTime(req, res, next){
+    //status route passthrough
+    if(req.params.reservationId && 
+      (req.path.split("/").length === 3) && 
+      req.method === "PUT"){
+        console.log("status check passthrough successful: validReserTime")
+        return next()
+    }
   const {reservation_time} = res.locals.reservation;
   const reserTime = serviceDate.convertTime(reservation_time,true);
   const currTime = serviceDate.convertTime(`${res.locals.currentDay.getHours()}:${res.locals.currentDay.getMinutes()}`,true)
@@ -117,7 +162,6 @@ function validReserTime(req, res, next){
 }
 
 async function validReserId(req,res,next){
-
   const { reservationId } = req.params;
   const reservation = await service.read(reservationId, "reservationId");
 
@@ -134,7 +178,15 @@ async function validReserId(req,res,next){
 }
 
 function validStatus(req, res, next){
-  const acceptStatus = ["booked","seated","finished"];
+  //update reservation route passthrough
+  if(req.params.reservationId && 
+    (req.path.split("/").length === 2) && 
+    req.method === "PUT") {
+      console.log("update reservation passthough successfull: validStatus")
+      return next()
+    }
+
+  const acceptStatus = ["booked","seated","finished","cancelled"];
   if(req.body.data){
     res.locals.status = req.body.data
   } else {
@@ -163,8 +215,15 @@ function validStatus(req, res, next){
 
 async function update(req, res, next){
 
-  const data = await service.update(res.locals.reservation.reservation_id, res.locals.status.status )
-  res.status(200).json({ data })
+  if(res.locals.status) {
+    res.locals.data = await service.update(res.locals.reservation.reservation_id, res.locals.status.status, "status")
+  }
+
+  if(!res.locals.status){
+    const { reservationId } = req.params
+    res.locals.data = await service.update(reservationId, res.locals.reservation, "reservation")
+  }
+  res.status(200).json({ data: res.locals.data })
 }
 
 function read(req, res, next){
@@ -196,5 +255,5 @@ module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validReser,validReserDate,validReserFormat,vaildReserFuture,validReserCloseDate,validReserTime,asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(validReserId), read],
-  update: [asyncErrorBoundary(validReserId),validStatus,asyncErrorBoundary(update)]
+  update: [asyncErrorBoundary(validReserId),validReser,validReserDate,validReserFormat,vaildReserFuture,validReserCloseDate,validReserTime,validStatus,asyncErrorBoundary(update)]
 };

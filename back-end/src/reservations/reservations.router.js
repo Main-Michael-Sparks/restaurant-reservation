@@ -13,7 +13,8 @@ router.route("/:reservationId/status")
     .put(controller.update)
 
 router.route("/:reservationId")
-    .get(controller.read);
+    .get(controller.read)
+    .put(controller.update)
 
 router.route("/")
     .get(controller.list)

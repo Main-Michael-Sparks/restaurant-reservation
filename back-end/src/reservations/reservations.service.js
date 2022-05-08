@@ -32,11 +32,20 @@ function read( search, searchFor="" ) {
     
 };
 
-function update(reservation_id,status){
-    console.log("update executed")
-    return knex("reservations")
-        .update({"status": status}, ["*"])
-        .where({"reservation_id": reservation_id})
+function update(reservation_id, data, updateType=""){
+
+    if(updateType === "status") {
+        return knex("reservations")
+            .update({"status": data}, ["*"])
+            .where({"reservation_id": reservation_id})
+    }
+
+    if(updateType === "reservation"){
+        return knex("reservations")
+            .update(data,["*"])
+            .where({"reservation_id": reservation_id})
+            .then(res => res[0])
+    }
 }
 
 

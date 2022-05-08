@@ -1,7 +1,8 @@
 import React  from "react";
 import {Link} from "react-router-dom"
 
-function ReservationTable({reservations}) {
+function ReservationTable({reservations, cancelHandler}) {
+
 
     if (reservations) {
         return (
@@ -41,10 +42,13 @@ function ReservationTable({reservations}) {
                     {reservation.people}
                   </td>
                   <td>
-                    {
-                      reservation.status === "booked"?(<><span data-reservation-id-status={reservation.reservation_id}>booked</span> <Link to={`/reservations/${reservation.reservation_id}/seat`}><button type="button">Seat</button></Link></>):
-                      reservation.status ==="seated"?(<span data-reservation-id-status={reservation.reservation_id}>seated</span>):null
-                    }
+                    {reservation.status === "booked"?<span data-reservation-id-status={reservation.reservation_id}>{reservation.status}</span>:null}
+                    {reservation.status === "booked"?<Link to={`/reservations/${reservation.reservation_id}/seat`}><button type="button">Seat</button></Link>:null}
+                    {reservation.status === "booked"?<Link to={`/reservations/${reservation.reservation_id}/edit`}><button type="button">Edit</button></Link>:null}
+                    {reservation.status === "booked"?<button data-reservation-id-cancel={reservation.reservation_id} name="cancel" onClick={()=>cancelHandler(reservation.reservation_id)}>Cancel</button>:null}
+                    {reservation.status ==="seated"?<span data-reservation-id-status={reservation.reservation_id}>{reservation.status}</span>:null}
+                    {reservation.status === "cancelled"? <span>{reservation.status}</span>: null}
+                    {reservation.status === "finished"? <span>{reservation.status}</span>:null}
                   </td>
               </tr>
             ) 

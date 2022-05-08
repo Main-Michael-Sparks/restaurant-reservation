@@ -7,6 +7,7 @@ import { today } from "../utils/date-time";
 import NewReservation from "./reservations/NewReservation";
 import NewTable from "./tables/NewTable.js";
 import Seat from "./seatReservation/Seat.js";
+import EditReservation from "./reservations/EditReservation";
 import Search from "./search/Search.js"
 
 
@@ -31,6 +32,9 @@ function Routes() {
       </Route>
       <Route path="/reservations/:reservationId/seat">
         <Seat />
+      </Route>
+      <Route path="/reservations/:reservationId/edit">
+        <EditReservation />
       </Route>
       <Route path="/dashboard">
         <Dashboard date={today()} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables, delTblSeat } from "../utils/api";
+import { listReservations,updateReservation, listTables, delTblSeat } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import ReservationTable from "./ReservationTable"
@@ -17,6 +17,8 @@ function Dashboard({ date }) {
   const [reloadResTbls, setReloadResTbls] = useState(null)
   const [tableFinishId, setTableFinishId] = useState();
   const [callDelApi, setCallDelApi] = useState(null);
+  const [canclResId, setCanclResId] = useState(null);
+  const [callResApi, setCallResApi] = useState(null)
   const [apiError, setApiError] = useState(null);
   const [newDate, setNewDate] = useState();
   const query = useQuery();
@@ -55,7 +57,7 @@ function Dashboard({ date }) {
     setApiError(null);
     listReservations(dateObj , abortController.signal)
       .then( data => {
-        setReservations(data.filter(res=> res.status != "finished"))
+        setReservations(data.filter(res=> res.status === "booked" || res.status === "seated"))
       })
       .catch(error=> setApiError([error]));
     return () => abortController.abort();
@@ -89,6 +91,7 @@ function Dashboard({ date }) {
     }
   },[callDelApi,tableFinishId]);
 
+
    // need a click handler, a popup, an api call and reRender.
    const finishHandler = (table_id) => {
     if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")){
@@ -96,6 +99,30 @@ function Dashboard({ date }) {
         setCallDelApi(true)
     } 
    };
+
+   const cancelHandler = (reservation_id) => {
+     if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")){
+        setCanclResId(reservation_id)
+        setCallResApi(true)
+     } 
+    };
+
+    useEffect(()=>{
+      if(callResApi){
+        const params = `${canclResId}/status`
+        const data = { status: "cancelled" }
+        const abortController  = new AbortController();
+        setApiError(null);
+        updateReservation(params,data,abortController.signal)
+          .then(()=>{
+            setCallResApi(null)
+            setCanclResId(null)
+            setReloadResTbls(true)
+          })
+          .catch(error=> setApiError([error]));
+        return () => abortController.abort();
+      }
+    },[callResApi,canclResId]);
 
   return (
     <main>
@@ -108,7 +135,7 @@ function Dashboard({ date }) {
       <TablesTable tables={tables} finishHandler={finishHandler} />
       </div>
       <div>
-      <ReservationTable reservations={reservations} />
+      <ReservationTable reservations={reservations} cancelHandler={cancelHandler} />
       </div>
       {/*JSON.stringify(reservations)*/}
       {
