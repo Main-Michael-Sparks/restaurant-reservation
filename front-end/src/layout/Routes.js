@@ -8,6 +8,7 @@ import NewReservation from "./reservations/NewReservation";
 import NewTable from "./tables/NewTable.js";
 import Seat from "./seatReservation/Seat.js";
 import EditReservation from "./reservations/EditReservation";
+import Search from "./search/Search.js"
 
 
 /**
@@ -40,6 +41,9 @@ function Routes() {
       </Route>
       <Route path="/tables/new">
         <NewTable />
+      </Route>
+      <Route path ="/search">
+        <Search />
       </Route>
       <Route>
         <NotFound />

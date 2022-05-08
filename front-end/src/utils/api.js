@@ -138,7 +138,6 @@ export async function seatTable(tableId,data,signal){
 };
 
 export async function delTblSeat(tableId, signal){
-  console.log("api table Id", tableId)
   const url = `${API_BASE_URL}/tables/${tableId}/seat`;
   const payload = {
     method: "DELETE",

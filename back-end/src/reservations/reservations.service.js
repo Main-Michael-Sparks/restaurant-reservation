@@ -24,6 +24,11 @@ function read( search, searchFor="" ) {
             .where({ "reservation_id": search })
             .first();
     };
+
+    if(searchFor === "mobile") {
+        return knex(resTable)
+        .where('mobile_number', 'ilike', `%${search}%`)
+    }
     
 };
 

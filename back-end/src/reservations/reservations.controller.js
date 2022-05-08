@@ -232,9 +232,18 @@ function read(req, res, next){
 
 
 async function list(req, res, _next) {
-  const reservation_date = req.query.date;
-  const resDates = await service.read(reservation_date, "date");
-  res.json({ data: resDates });
+
+    if(req.query.date){
+      const reservation_date = req.query.date;
+      res.locals.data = await service.read(reservation_date, "date");
+    }
+
+    if(req.query.mobile_number) {
+      const mobile_number = req.query.mobile_number
+      res.locals.data = await service.read(mobile_number, "mobile")
+    }
+    
+  res.json({ data: res.locals.data });
 }
 
 async function create(req, res, _next){
