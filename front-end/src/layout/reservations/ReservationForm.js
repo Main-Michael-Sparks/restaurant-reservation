@@ -22,11 +22,11 @@ function ReservationForm({ formData, formChangeHandler, formSubmitHandler, cance
                 <br/>
                 <label htmlFor="reservation_date" className="form-label">Date of Reservation:</label>
                 <br/>
-                <input name="reservation_date" type="date" id="reservation_date" className="form-control"  placeholder="Enter reservation date" onChange={formChangeHandler} value={formData.reservation_date} required/>
+                <input name="reservation_date" type="date" id="reservation_date" className="form-control"  placeholder="YYYY-MM-DD" onChange={formChangeHandler} value={formData.reservation_date} pattern="\d{4}-\d{2}-\d{2}" required/>
                 <br/>
                 <label htmlFor="reservation_time" className="form-label">Time of Reservation:</label>
                 <br/>
-                <input name="reservation_time" type="time" id="reservation_time" className="form-control"  placeholder="Enter reservation time" onChange={formChangeHandler} value={formData.reservation_time} required/>
+                <input name="reservation_time" type="time" id="reservation_time" className="form-control"  placeholder="HH:MM" onChange={formChangeHandler} value={formData.reservation_time} pattern="[0-9]{2}:[0-9]{2}" required/>
                 <br />
                 <label htmlFor="people" min="1" className="form-label">Number of people in the party:</label>
                 <br/>

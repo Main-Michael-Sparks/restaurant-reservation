@@ -21,7 +21,7 @@ function ReservationTable({reservations, cancelHandler}) {
                     </tr>
                 </thead>
                 <tbody>
-        {reservations && reservations.length == 0?(<tr><td colSpan={7}>No Reservations for date specified..</td></tr>): null}
+        {reservations && reservations.length === 0?(<tr><td colSpan={7}>No Reservations for date specified..</td></tr>): null}
         {reservations.map(reservation =>{
             return (
               <tr key={reservation.reservation_id}>

@@ -20,7 +20,7 @@ function TablesTable({tables, finishHandler}) {
                 {tables.map(table =>{
                     return (
                         <tr key={table.table_id}>
-                            <td scope="row">
+                            <td>
                                 {table.table_name}
                             </td>
                             <td>

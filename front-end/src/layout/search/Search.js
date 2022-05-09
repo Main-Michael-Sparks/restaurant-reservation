@@ -92,7 +92,7 @@ function Search(){
                 <button type="submit" className="btn btn-outline-secondary mt-1">Search</button>
             </form>
            {apiRes && srchReslt.length > 0?<ReservationTable reservations={srchReslt} cancelHandler={cancelHandler} />:
-           apiRes && srchReslt.length == 0? (<p className="mt-2">No reservations found</p>): null }
+           apiRes && srchReslt.length === 0? (<p className="mt-2">No reservations found</p>): null }
         </div>
     )
 };
