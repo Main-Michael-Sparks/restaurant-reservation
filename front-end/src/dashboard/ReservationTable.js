@@ -6,16 +6,18 @@ function ReservationTable({reservations, cancelHandler}) {
 
     if (reservations) {
         return (
+          <div className="table-responsive table-hover">
             <table className="table">
                 <thead>
                     <tr className="table-light">
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
                         <th scope="col">Mobile</th>
                         <th scope="col">Date</th>
                         <th scope="col">Time</th>
                         <th scope="col">People</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Options</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,6 +59,7 @@ function ReservationTable({reservations, cancelHandler}) {
           })}
           </tbody>
     </table>
+  </div>
         )
     } else {
         return null

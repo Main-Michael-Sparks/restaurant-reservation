@@ -98,9 +98,9 @@ function NewReservation(){
         };
 
         if(resDate && resTime.length){
-            console.log("Step 4.9 reservation validiton conditon TIME BOTH", displayError)
-            if((resDate.getTime() === currentDay.getTime()) && (resTime[0] < curTime[0])){
-                console.log("Step 4.9 reservation validiton conditon TIME BOTH EXECUTED", displayError)
+            if((resDate.getTime() === currentDay.getTime()) && ((resTime[0] < ((10*60)+30))|| (resTime[0] > ((21*60)+30)))/*(resTime[0] < curTime[0])*/){
+                console.log("reservationDay",resDate.getTime(),"current Day",currentDay.getTime(),)
+                console.log("reservation time",resTime[0], "current time",curTime[0])
                 if(!displayError.find(errMsg => errMsg.message === "Reservation time must be in the future")){
                     setDisplayError([
                         ...displayError,

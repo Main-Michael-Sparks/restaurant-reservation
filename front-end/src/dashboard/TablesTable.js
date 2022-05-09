@@ -7,13 +7,13 @@ function TablesTable({tables, finishHandler}) {
 
     if(tables) {
         return (
-            <table className="table">
+            <table className="table table-hover">
                 <thead>
                     <tr className="table-light">
                         <th scope="col">Name</th>
                         <th scope="col">Capacity</th>
                         <th scope="col">Availability</th>
-                        <th scope="col">Clear Table</th>
+                        <th scope="col">Clear</th>
                     </tr>
                 </thead>
                 <tbody>
