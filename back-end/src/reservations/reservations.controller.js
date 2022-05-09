@@ -10,7 +10,6 @@ function validReser(req, res, next) {
       if(req.params.reservationId && 
         (req.path.split("/").length === 3) && 
         req.method === "PUT"){
-          console.log("status check passthrough successful: validReser")
           return next()
         }
 
@@ -71,7 +70,6 @@ function validReserDate(req, res, next){
   if(req.params.reservationId && 
     (req.path.split("/").length === 3) && 
     req.method === "PUT"){
-      console.log("status check passthrough successful: validReserDate")
       return next()
   }
 
@@ -88,7 +86,6 @@ function validReserFormat(req, res, next){
   if(req.params.reservationId && 
     (req.path.split("/").length === 3) && 
     req.method === "PUT"){
-      console.log("status check passthrough successful: validReserFormat")
       return next()
   }
 
@@ -124,7 +121,6 @@ function validReserCloseDate(req,res,next){
     if(req.params.reservationId && 
       (req.path.split("/").length === 3) && 
       req.method === "PUT"){
-        console.log("status check passthrough successful: validReserCloseDate")
         return next()
     }
 
@@ -141,7 +137,6 @@ function validReserTime(req, res, next){
     if(req.params.reservationId && 
       (req.path.split("/").length === 3) && 
       req.method === "PUT"){
-        console.log("status check passthrough successful: validReserTime")
         return next()
     }
   const {reservation_time} = res.locals.reservation;
@@ -182,7 +177,6 @@ function validStatus(req, res, next){
   if(req.params.reservationId && 
     (req.path.split("/").length === 2) && 
     req.method === "PUT") {
-      console.log("update reservation passthough successfull: validStatus")
       return next()
     }
 
