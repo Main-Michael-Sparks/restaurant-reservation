@@ -42,17 +42,21 @@ function NewReservation(){
     const [dataIsValid, setDataIsValid] = useState(null);
     const [dataValidationStage, setDataValidationStage] = useState(false);
     const [dataValidationComplete, setDataValidtionComplete] = useState(false);
-
     const history = useHistory();
-    const currentDay = new Date(today());
+    //const formatToday = today().split("-")
+    const currentDay = new Date(/*formatToday[0],formatToday[1] - 1,formatToday[2]*/); //removed today() fucntion
     const resTime = convertTime(dataToValidate.reservation_time,true);
     const curTime = convertTime(`${currentDay.getHours()}:${currentDay.getMinutes()}`,true);
-
+    //console.log("current Time hours",currentDay.getHours(),"current time mins",currentDay.getMinutes() )
+    //console.log("current day",currentDay, "res",resDate)
+    //console.log('currentDay Get TIme',currentDay.getTime())
 
     // sets stage for form validation: reservation date to check
     useEffect(()=>{
         if(dataValidationStage){
-            setResDate(new Date(dataToValidate.reservation_date));
+            const resDateFormat = dataToValidate.reservation_date.split("-")
+            setResDate(new Date(resDateFormat[0],resDateFormat[1]-1,resDateFormat[2]/*dataToValidate.reservation_date*/));
+            console.log("res Date from form",dataToValidate.reservation_date)
         };
     },[dataValidationStage,dataToValidate]);
 
@@ -60,15 +64,16 @@ function NewReservation(){
     useEffect(()=>{
         if(resDate){
 
-            if(resDate.getDay() === 1){
+            if(resDate.getDay() === 2/*chaned from one*/){
                 setDisplayError([{message: "Reservation cannot be on Tuesday"}]);
             };
 
-            if(resDate.getTime() < currentDay.getTime()){
+            if(((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)) < (-24)/*resDate.getTime() < currentDay.getTime()*/){
+                console.log("res in future",((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)) < (-24))
                 setDisplayError([{message: "Reservation must be in the future"}]);
             };
 
-            if(resDate.getDay() === 1 && resDate.getTime() < currentDay.getTime()){
+            if(resDate.getDay() === 2/*chaned from one*/ && resDate.getTime() < currentDay.getTime()){
                  setDisplayError([
                     {message: "Reservation cannot be on Tuesday"},
                     {message: "Reservation must be in the future"}
@@ -98,8 +103,8 @@ function NewReservation(){
         };
 
         if(resDate && resTime.length){
-            if((resDate.getTime() === currentDay.getTime()) && ((resTime[0] < ((10*60)+30))|| (resTime[0] > ((21*60)+30)))/*(resTime[0] < curTime[0])*/){
-                console.log("reservationDay",resDate.getTime(),"current Day",currentDay.getTime(),)
+            if(!((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)) > (24) /*&& ((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)) > (-24)*//*(resDate.getTime() === currentDay.getTime())*/ && ((resTime[0] < ((10*60)+30)) || (resTime[0] > ((21*60)+30))) || (resTime[0] < curTime[0])){
+                console.log("reservation Evalutation",((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)))
                 console.log("reservation time",resTime[0], "current time",curTime[0])
                 if(!displayError.find(errMsg => errMsg.message === "Reservation time must be in the future")){
                     setDisplayError([

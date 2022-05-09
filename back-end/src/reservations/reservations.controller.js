@@ -155,7 +155,7 @@ function validReserTime(req, res, next){
     return next({status:400, message: `reservation_time: ${reservation_time} must be before we close`})
   };
 
-  if((res.locals.reserDate.getTime() === res.locals.currentDay.getTime()) && (reserTime[0] < currTime[0])){
+  if((res.locals.reserDate.getTime() === res.locals.currentDay.getTime()) && ((reserTime[0] < ((10*60)+30))|| (reserTime[0] > ((21*60)+30)))/*(reserTime[0] < currTime[0])*/){
     return next({status:400, message: `reservation_time: ${reservation_time} must be in the future`})
   }
   return next()
