@@ -83,14 +83,14 @@ function Search(){
       },[callResApi,canclResId]);
 
     return(
-        <div>
+        <div className="pb-1 pt-2">
             <h1>Search Reservations</h1>
             {apiError?<ErrorAlert error={apiError} />:null}
             <form onSubmit={formSubmitHandler}>
                 <label htmlFor="mobile_number" className="form-label">Mobile Number</label>
                 <br />
                 <input name="mobile_number" id="mobile_number" className="form-control" type="text" placeholder="Enter a customer's phone number" value={formData.mobile_number} onChange={formChangeHandler} />
-                <button type="submit" className="btn btn-outline-secondary">Find</button>
+                <button type="submit" className="btn btn-outline-secondary mt-1">Search</button>
             </form>
            {apiRes && srchReslt.length > 0?<ReservationTable reservations={srchReslt} cancelHandler={cancelHandler} />:
            apiRes && srchReslt.length == 0? (<p>No reservations found</p>): null }

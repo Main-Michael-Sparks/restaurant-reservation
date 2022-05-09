@@ -211,7 +211,7 @@ function NewReservation(){
       }, [dataToPost,history]);
 
     return (
-        <div>
+        <div className="pt-2 pb-3">
             <h1>Create New Reservation</h1>
             { activeErrorState && errorHandover?<ErrorAlert error={errorHandover}/>: null }
             <ReservationForm formData={formData} formChangeHandler={formChangeHandler} formSubmitHandler={formSubmitHandler} cancelHandler={cancelHandler}/>

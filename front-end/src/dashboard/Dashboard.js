@@ -125,10 +125,10 @@ function Dashboard({ date }) {
     },[callResApi,canclResId]);
 
   return (
-    <main>
+    <main className="pb-2 pt-2">
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-      <h4 className="mb-0">Reservations</h4>
+      <div className="pb-1 pt-1">
+      <h4>Reservations</h4>
       </div>
       <div>
       <ErrorAlert error={apiError} />
