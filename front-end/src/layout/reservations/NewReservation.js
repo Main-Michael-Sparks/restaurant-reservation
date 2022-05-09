@@ -103,7 +103,7 @@ function NewReservation(){
         };
 
         if(resDate && resTime.length){
-            if(!((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)) > (24) /*&& ((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)) > (-24)*//*(resDate.getTime() === currentDay.getTime())*/ && ((resTime[0] < ((10*60)+30)) || (resTime[0] > ((21*60)+30))) || (resTime[0] < curTime[0])){
+            if(!(((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)) > (24)) /*&& ((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)) > (-24)*//*(resDate.getTime() === currentDay.getTime())*/ && (((resTime[0] < ((10*60)+30)) || (resTime[0] > ((21*60)+30))) || (resTime[0] < curTime[0]))){
                 console.log("reservation Evalutation",((((resDate.getTime()/1000)/60)/60) - (((currentDay.getTime()/1000)/60)/60)))
                 console.log("reservation time",resTime[0], "current time",curTime[0])
                 if(!displayError.find(errMsg => errMsg.message === "Reservation time must be in the future")){
