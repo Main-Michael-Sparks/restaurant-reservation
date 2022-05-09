@@ -10,7 +10,6 @@ function convertTime(time, min = false){
     if(!time) return []
 
     const timeArray = time.split(":")
-
     if(min) {
         return [(Number(timeArray[0])*60)+Number(timeArray[1])]
     }

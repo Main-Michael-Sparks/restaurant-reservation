@@ -12,7 +12,15 @@ import "./Layout.css";
  * @returns {JSX.Element}
  */
 function Layout() {
+    // .flex-sm-column
   return (
+      <div className="container-fluid">
+            <Menu />
+            <Routes />
+      </div>
+  )
+  /*(
+    
     <div className="container-fluid">
       <div className="row h-100">
         <div className="col-md-2 side-bar">
@@ -23,7 +31,7 @@ function Layout() {
         </div>
       </div>
     </div>
-  );
+  ); */
 }
 
 export default Layout;

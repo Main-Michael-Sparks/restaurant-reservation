@@ -125,27 +125,28 @@ function Dashboard({ date }) {
     },[callResApi,canclResId]);
 
   return (
-    <main>
+    <main className="pb-2 pt-2">
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations</h4>
+      <div className="pb-1 pt-1">
+      <h4>Reservations</h4>
       </div>
+      <div>
       <ErrorAlert error={apiError} />
+      </div>
+      {
+        reservations?
+        (<div>
+          <button name="previous" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Previous</button>
+          <button name="today" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Today</button>
+          <button name="next" className="btn btn-outline-secondary" onClick={dayButtonHandler}>Next</button>
+        </div>):null
+        }
       <div>
       <TablesTable tables={tables} finishHandler={finishHandler} />
       </div>
       <div>
       <ReservationTable reservations={reservations} cancelHandler={cancelHandler} />
       </div>
-      {/*JSON.stringify(reservations)*/}
-      {
-        reservations?
-        (<div>
-          <button name="previous" onClick={dayButtonHandler}>Previous</button>
-          <button name="next" onClick={dayButtonHandler}>Next</button>
-          <button name="today" onClick={dayButtonHandler}>Today</button>
-        </div>):null
-        }
     </main>
   );
 }

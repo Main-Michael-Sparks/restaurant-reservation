@@ -167,20 +167,19 @@ function NewTable(){
 
 
     return (
-        <div>
+        <div className="pt-2 pb-3">
             <h1>New Table</h1>
             {activeErrorState && errorHandoff? <ErrorAlert error={errorHandoff} />:null}
             <form onSubmit={formSubmitHandler}>
-                <label htmlFor="table_name">Table Name:</label>
+                <label htmlFor="table_name" className="form-label">Table Name:</label>
                 <br/>
-                <input name="table_name" type="text" id="table_name" placeholder="Enter table name" onChange={formChangeHandler} value={formData.table_name} />
+                <input name="table_name" type="text" id="table_name" className="form-control" placeholder="Enter table name" onChange={formChangeHandler} value={formData.table_name} />
                 <br/>
-                <label htmlFor="capacity" min="1">Capacity:</label>
+                <label htmlFor="capacity" min="1" className="form-label">Capacity:</label>
                 <br/>
-                <input name="capacity" type="number" id="capacity" placeholder="Number of people" onChange={formChangeHandler} value={null} />
+                <input name="capacity" type="number" id="capacity" className="form-control" placeholder="Number of people" onChange={formChangeHandler} value={formData.capacity} />
                 <br/>
-                <br/>
-                <button type="cancel" onClick={cancelHandler}>Cancel</button><button type="submit">Submit</button>
+                <button type="cancel" className="btn btn-outline-secondary" onClick={cancelHandler}>Cancel</button><button type="submit" className="btn btn-outline-secondary">Submit</button>
             </form>
         </div>
     )

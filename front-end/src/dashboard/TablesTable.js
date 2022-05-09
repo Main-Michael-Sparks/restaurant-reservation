@@ -7,13 +7,13 @@ function TablesTable({tables, finishHandler}) {
 
     if(tables) {
         return (
-            <table>
+            <table className="table table-hover">
                 <thead>
-                    <tr>
-                        <th>Table Name</th>
-                        <th>Capacity</th>
-                        <th>Free/Occupied</th>
-                        <th>Table Finished</th>
+                    <tr className="table-light">
+                        <th scope="col">Name</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col">Availability</th>
+                        <th scope="col">Clear</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,7 +31,7 @@ function TablesTable({tables, finishHandler}) {
                                 (<span data-table-id-status={table.table_id}>free</span>)}
                             </td>
                             <td>
-                                {table.occupied?(<button data-table-id-finish={table.table_id} name="finished" onClick={()=>finishHandler(table.table_id)}>Finish</button>): null}
+                                {table.occupied?(<button data-table-id-finish={table.table_id} name="finished" className="btn btn-outline-secondary" onClick={()=>finishHandler(table.table_id)}>Finish</button>): null}
                             </td>
                         </tr>
                     ) 
