@@ -82,7 +82,7 @@ function Dashboard({ date }) {
       })
       .catch((error) => setApiError([error]));
     return () => abortController.abort();
-  }
+  };
 
   // API Call: Removes table assignment from an reservation.
   useEffect(() => {
@@ -148,6 +148,7 @@ function Dashboard({ date }) {
           <button name="previous" className="btn btn-outline-secondary" onClick={dayButtonHandler}> Previous </button>
           <button name="today" className="btn btn-outline-secondary" onClick={dayButtonHandler}> Today </button>
           <button name="next" className="btn btn-outline-secondary" onClick={dayButtonHandler}> Next </button>
+          <p className="p-0 m-0"><sub>{newDate}</sub></p>
         </div>
       ) : null}
       <div>
@@ -158,6 +159,6 @@ function Dashboard({ date }) {
       </div>
     </main>
   );
-}
+};
 
 export default Dashboard;
