@@ -1,5 +1,4 @@
-
-// add cols to the default table migration script
+// Add columns to the reservations table. 
 exports.up = function(knex) {
   return knex.schema.table("reservations",(table)=>{
         table.string("first_name")
@@ -18,7 +17,7 @@ exports.up = function(knex) {
   });
 };
 
-// remove the cols added to the deault table migration script
+// Remove columns from the reservations table on roll back.
 exports.down = function(knex) {
     return knex.schema.table("reservations", (table)=>{
         table.dropColumn("first_name");

@@ -1,5 +1,4 @@
-// default no method for route handler
-
+// Error handler for methods not allowed on endpoints. 
 function methodNotAllowed(req, _res, next) {
     next({
         status: 405,

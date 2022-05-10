@@ -1,5 +1,4 @@
-// catch errors for async operations
-
+// Error handler for async operations.
 function asyncErrorBoundary(delegate, defaultStatus) {
     return (req, res, next) => {
         Promise.resolve()

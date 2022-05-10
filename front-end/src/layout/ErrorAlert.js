@@ -23,7 +23,7 @@ function ErrorAlert({ error }) {
     )
 
   if(Array.isArray(error) && error.length > 0){
-      return errorComp
+    return errorComp
   } else {
     return null
   }
