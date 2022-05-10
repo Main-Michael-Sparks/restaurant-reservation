@@ -15,6 +15,7 @@ function EditReservation() {
     people: "",
   };
 
+  /* useEffect deps left out to prevent render loops and other problems */
   const [formData, setFormData] = useState(initForm);
   const [dataToPut, setDataToPut] = useState(null);
   const [sendUpdate, setSendUpdate] = useState(null);

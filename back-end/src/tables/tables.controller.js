@@ -1,6 +1,7 @@
 const service = require("./tables.service.js")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary.js");
 
+// Checks tables for the correct keys and properties. 
 function validTableData(req, res, next) {
 
     const errorObj = {status: 400, message:"" };
@@ -35,6 +36,7 @@ function validTableData(req, res, next) {
     return next();
 };
 
+// Checks table "seat" for the correct keys and properties.
 function validTableSeatData(req, res, next){
 
     if(req.body.data){
@@ -55,6 +57,7 @@ function validTableSeatData(req, res, next){
     return next();
 };
 
+// Checks table for a reservation assignment.  
 async function validTableSeatReserId(req, res, next){
     const reservation = await service.read(res.locals.seatTable);
     if (!reservation) {
@@ -67,6 +70,7 @@ async function validTableSeatReserId(req, res, next){
     return next();
 }
 
+// Checks table "seat" for capacity, reservation is seated or table is occupied. 
 async function validTableSeat(req, res, next){
     //first union is tables, the second is reservations
     const resrTblChk = await service.read(res.locals.seatTable);
@@ -101,6 +105,7 @@ async function validTableSeat(req, res, next){
     return next();
 }
 
+// Checks table id to see if table exists. 
 async function validTable(req, res, next){
     res.locals.table_id = req.params.table_id
     const table = await service.list(res.locals.table_id)
@@ -114,6 +119,7 @@ async function validTable(req, res, next){
     return next();
 };
 
+// Checks table for occupied.
 async function isTblOcc(req, res, next){
 
     const isOccupied = await service.read(res.locals);

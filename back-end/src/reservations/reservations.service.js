@@ -2,12 +2,14 @@ const knex = require("../db/connection.js")
 
 const resTable = "reservations"
 
+//SQL query to add a new reservation into the reservation table. 
 function create(newRes){
     return knex(resTable)
         .insert(newRes,['*'])
         .then(returnRes=>returnRes[0]);
 };
 
+//SQL queries to "search" for reservations by date, reservation Id or phone number.
 function read( search, searchFor="" ) {
 
     if(searchFor === "date") {
@@ -32,6 +34,7 @@ function read( search, searchFor="" ) {
     
 };
 
+//SQL queries to update reservations or reservations status. 
 function update(reservation_id, data, updateType=""){
 
     if(updateType === "status") {
@@ -47,7 +50,6 @@ function update(reservation_id, data, updateType=""){
             .then(res => res[0])
     }
 }
-
 
 module.exports = {
     create,

@@ -11,6 +11,7 @@ function Search() {
   }
   const initReslt = [];
 
+  /* useEffect deps left out to prevent render loops and other problems */
   const [formData, setFormData] = useState(initForm);
   const [dataToSend, setDataToSend] = useState(null);
   const [srchReslt, setSrchReslt] = useState(initReslt);

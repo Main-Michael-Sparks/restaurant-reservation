@@ -1,4 +1,4 @@
-
+// Add a foreign key constraint to the reservations table to create a many-one relations with tables table.
 exports.up = function(knex) {
     return knex.schema.table("reservations", (table)=>{
         table.integer("table_id")
@@ -10,6 +10,7 @@ exports.up = function(knex) {
     });
 };
 
+// Delete the foreign key column on roll back. 
 exports.down = function(knex) {
   return knex.schema.table("reservations", (table)=>{
       table.dropColumn("table_id");

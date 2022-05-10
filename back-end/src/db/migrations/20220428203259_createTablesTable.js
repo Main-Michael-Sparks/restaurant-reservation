@@ -1,4 +1,4 @@
-
+// Create the table's table, add a key, table name and capacity. 
 exports.up = function(knex) {
     return knex.schema.createTable("tables", (table) => {
         table.increments("table_id").primary();
@@ -9,6 +9,7 @@ exports.up = function(knex) {
   
 };
 
+// Drop the table's table on roll back. 
 exports.down = function(knex) {
     return knex.schema.dropTable("tables");
 };

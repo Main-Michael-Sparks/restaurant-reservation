@@ -1,10 +1,8 @@
 const service = require("./reservations.service.js")
 const serviceDate = require("./reservations.service.date.js")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary.js")
-/**
- * List handler for reservation resources
- */
 
+// Checks reservations for the correct keys and properties. 
 function validReser(req, res, next) {
       //status route passthrough
       if(req.params.reservationId && 
@@ -54,7 +52,7 @@ function validReser(req, res, next) {
         errorObj.message = 'Reservation must have some number of people'
         return next(errorObj)
       }
-      //status is currently passing though may cause test break. Need to come back and deal with. 
+
       if(res.locals.reservation.status && 
         (res.locals.reservation.status === "seated" || 
         res.locals.reservation.status === "finished")) {
@@ -64,6 +62,7 @@ function validReser(req, res, next) {
    return next()
 }
 
+// Checks reservations for the correct date format. 
 function validReserDate(req, res, next){
 
   //status route passthrough
@@ -81,6 +80,7 @@ function validReserDate(req, res, next){
   return next()
 }
 
+// Checks reservations for the correct time format.
 function validReserFormat(req, res, next){
     //status route passthrough
   if(req.params.reservationId && 
@@ -97,7 +97,7 @@ function validReserFormat(req, res, next){
   return next()
 }
 
-
+// Checks reservations for future date.
 function vaildReserFuture(req, res, next){
     //status route passthrough
   if(req.params.reservationId && 
@@ -116,6 +116,7 @@ function vaildReserFuture(req, res, next){
   return next();
 }
 
+// Checks reservations for a Tuesday (date closed).
 function validReserCloseDate(req,res,next){
     //status route passthrough
     if(req.params.reservationId && 
@@ -132,6 +133,7 @@ function validReserCloseDate(req,res,next){
   return next();
 }
 
+// Checks reservations for open and close time. 
 function validReserTime(req, res, next){
     //status route passthrough
     if(req.params.reservationId && 
@@ -141,7 +143,6 @@ function validReserTime(req, res, next){
     }
   const {reservation_time} = res.locals.reservation;
   const reserTime = serviceDate.convertTime(reservation_time,true);
-  const currTime = serviceDate.convertTime(`${res.locals.currentDay.getHours()}:${res.locals.currentDay.getMinutes()}`,true)
   if (reserTime[0] < ((10*60)+30)) {
     return next({status:400, message: `reservation_time: ${reservation_time} must be when we are open`})
   };
@@ -150,12 +151,13 @@ function validReserTime(req, res, next){
     return next({status:400, message: `reservation_time: ${reservation_time} must be before we close`})
   };
 
-  if((res.locals.reserDate.getTime() === res.locals.currentDay.getTime()) && ((reserTime[0] < ((10*60)+30))|| (reserTime[0] > ((21*60)+30)))/*(reserTime[0] < currTime[0])*/){
+  if((res.locals.reserDate.getTime() === res.locals.currentDay.getTime()) && ((reserTime[0] < ((10*60)+30))|| (reserTime[0] > ((21*60)+30)))){
     return next({status:400, message: `reservation_time: ${reservation_time} must be in the future`})
   }
   return next()
 }
 
+// Checks reservations for a valid Id.
 async function validReserId(req,res,next){
   const { reservationId } = req.params;
   const reservation = await service.read(reservationId, "reservationId");
@@ -172,6 +174,7 @@ async function validReserId(req,res,next){
 
 }
 
+// Checks the status of a reservation. 
 function validStatus(req, res, next){
   //update reservation route passthrough
   if(req.params.reservationId && 

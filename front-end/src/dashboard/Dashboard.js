@@ -15,6 +15,7 @@ import { next, today, previous } from "../utils/date-time";
 
 function Dashboard({ date }) {
 
+  /* useEffect deps left out to prevent render loops and other problems */
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
   const [reloadResTbls, setReloadResTbls] = useState(null);

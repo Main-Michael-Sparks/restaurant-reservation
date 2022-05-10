@@ -11,6 +11,7 @@ function NewTable() {
   };
   const initErrors = [];
 
+  /* useEffect deps left out to prevent render loops and other problems */
   const [formData, setFormData] = useState(initForm);
   const [dataToPost, setDataToPost] = useState(null);
   const [dataToValidate, setDataToValidate] = useState(initForm);

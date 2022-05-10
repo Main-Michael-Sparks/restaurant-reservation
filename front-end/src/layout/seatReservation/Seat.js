@@ -10,6 +10,7 @@ function Seat() {
   };
   const initErrors = [];
 
+  /* useEffect deps left out to prevent render loops and other problems */
   const [formData, setFormData] = useState(initForm);
   const [tables, setTables] = useState([]);
   const [reservation, setReservation] = useState([]);
