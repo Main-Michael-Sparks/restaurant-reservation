@@ -10,12 +10,14 @@ import React from "react";
 
 function ErrorAlert({ error }) {
 
+  // Error objects have no unique ids associated with them. So keys are randomly assigned.
   const errorComp = (
     <div className="alert alert-danger m-1">
       <ul>
-        {error?error.map((errors, index)=>{
+        {error?error.map((errors)=>{
+            const keyGen = Math.floor(Math.random() * new Date().getTime()).toString();
             return (
-              <li key={index}>Error: {errors.message}</li>
+              <li key={keyGen}>Error: {errors.message}</li>
             )
         }):null}
       </ul>
