@@ -49,7 +49,7 @@ function EditReservation() {
         .catch((error) => setApiErrors([error]));
       return () => abortController.abort();
     }
-  }, [sendUpdate, dataToPut]);
+  }, [sendUpdate]);
 
   // Form submit handler, hands form data off to the update API call.
   const formSubmitHandler = (event) => {

@@ -90,7 +90,7 @@ function Seat() {
   useEffect(() => {
     if (dataValidationStage) {
 
-      const selectedTable = tables.find((table) => dataToValidate.table_id == table.table_id);
+      const selectedTable = tables.find((table) => Number(dataToValidate.table_id) === Number(table.table_id));
 
       if (formData.table_id === "") {
         setDisplayError([{

@@ -80,7 +80,7 @@ function NewTable(){
                 }
             };
 
-            if(dataToValidate.table_name && dataToValidate.table_name.length == 1){
+            if(dataToValidate.table_name && dataToValidate.table_name.length === 1){
                 if(!displayError.find(errMsg => errMsg.message === "Table_name must be longer than one chacter")){
                     setDisplayError([
                        ...displayError,
