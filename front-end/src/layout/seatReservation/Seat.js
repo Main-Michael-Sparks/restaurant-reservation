@@ -171,7 +171,7 @@ function Seat() {
   return (
     <div>
       <h1>Seat Table</h1>
-      <h2>{`#${reservation.reservation_id} - ${reservation.first_name} ${reservation.first_name} on ${reservation.reservation_date} at ${reservation.reservation_time} for ${reservation.people}`}</h2>
+      <h2 className="text-muted">{`#${reservation.reservation_id} - ${reservation.first_name} ${reservation.first_name} on ${reservation.reservation_date} at ${reservation.reservation_time} for ${reservation.people}`}</h2>
       {activeErrorState && errorHandoff ? (<ErrorAlert error={errorHandoff} />) : null}
       <form onSubmit={formSubmitHandler}>
         <label htmlFor="table_id">Table Number:</label>
