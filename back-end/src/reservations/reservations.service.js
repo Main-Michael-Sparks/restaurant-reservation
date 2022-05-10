@@ -41,6 +41,7 @@ function update(reservation_id, data, updateType=""){
         return knex("reservations")
             .update({"status": data}, ["*"])
             .where({"reservation_id": reservation_id})
+            .then(res => res[0])
     }
 
     if(updateType === "reservation"){
