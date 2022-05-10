@@ -1,7 +1,6 @@
 const knex = require("../db/connection.js")
 
-
-
+// SQL queries for reservations on foreign key, reservation id or reservations with tables (unionALL)
 function read(idPack){
     if (idPack.table_id && idPack.reservation_id) {
         return knex("tables")
@@ -33,6 +32,7 @@ function read(idPack){
     };
 };
 
+// SQL queries for tables by Id or joined with reservations on foreign key. (list tables and tables with reservations assigned)
 function list(table_id){
     if(table_id){
         return knex("tables")
@@ -40,13 +40,14 @@ function list(table_id){
             .where({ table_id })
             .first();
     };
+
     return knex("tables")
         .leftJoin("reservations", "reservations.table_id", "tables.table_id")
         .select("tables.table_id","tables.table_name","tables.capacity", "reservations.reservation_id as occupied")
         .orderBy("tables.table_name");
 };
 
-
+// SQL query to assign a foreign key to reservations "seating it" to a table.
 function update(idPack){
     return knex("reservations")
         .update({ "table_id" : idPack.table_id,
@@ -55,6 +56,7 @@ function update(idPack){
         .where({"reservation_id": idPack.reservation_id});
 };
 
+//SQL query to create a new table, 'jest test' query added for compatibility. 
 function create(table) {
 
     //if statement added for frontend jest test #5 API call
@@ -83,6 +85,7 @@ function create(table) {
         .then(newTable => newTable[0]);
 };
 
+// SQL query to remove a seating assignment from a table. (query reservations to remove key, and update status)
 function destory(table_id) {
    return knex("reservations")
     .update({ "table_id": null,

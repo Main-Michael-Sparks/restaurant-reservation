@@ -1,4 +1,4 @@
-
+// Seeds the tables table with a few default 'tables'.
 exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('tables').del()
@@ -12,8 +12,3 @@ exports.seed = function(knex) {
       ]);
     });
 };
-
-/* original params for ref
-knex('table_name')
-{id: 1, colName: row 1}
-*/
