@@ -107,6 +107,7 @@ async function validTableSeat(req, res, next){
 
 // Checks table id to see if table exists. 
 async function validTable(req, res, next){
+    console.log("request:", req.baseUrl, req.body)
     res.locals.table_id = req.params.table_id;
     const table = await service.list(res.locals.table_id)
     console.log("BACKEND from validTable 1st Middleware in chain", table, res.locals.table_id)
