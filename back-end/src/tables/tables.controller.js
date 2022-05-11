@@ -107,9 +107,9 @@ async function validTableSeat(req, res, next){
 
 // Checks table id to see if table exists. 
 async function validTable(req, res, next){
-    res.locals.table_id = req.params.table_id
+    res.locals.table_id = req.params.table_id;
     const table = await service.list(res.locals.table_id)
-
+    console.log("BACKEND from validTable 1st Middleware in chain", table, res.locals.table_id)
     if(!table) {
         return next({
             status: 404,
@@ -123,7 +123,7 @@ async function validTable(req, res, next){
 async function isTblOcc(req, res, next){
 
     const isOccupied = await service.read(res.locals);
-    
+    console.log("Second middlware in DELETE chain", isOccupied)
     if(!isOccupied) {
         return next({
             status: 400,
@@ -151,8 +151,9 @@ async function create(req, res, next){
 
 async function distroy(req, res, next){
     const data = await service.destory(res.locals.table_id)
+    console.log("Destroy function in Delete Chain", data)
     res.status(200).json({ data })
-}
+};
 
 module.exports = {
     list,

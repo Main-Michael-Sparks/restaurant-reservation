@@ -2,6 +2,7 @@ const knex = require("../db/connection.js")
 
 // SQL queries for reservations on foreign key, reservation id or reservations with tables (unionALL)
 function read(idPack){
+    console.log("from read function:", idPack)
     if (idPack.table_id && idPack.reservation_id) {
         return knex("tables")
             .select("capacity","table_id as occupied")
@@ -34,6 +35,7 @@ function read(idPack){
 
 // SQL queries for tables by Id or joined with reservations on foreign key. (list tables and tables with reservations assigned)
 function list(table_id){
+    console.log("From List", table_id)
     if(table_id){
         return knex("tables")
             .select("*")
