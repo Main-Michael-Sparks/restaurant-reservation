@@ -34,7 +34,13 @@ function read(idPack){
 };
 
 // SQL queries for tables by Id or joined with reservations on foreign key. (list tables and tables with reservations assigned)
-function list(table_id){
+function list(table_id, debug=null){
+    // params added for jest debugging
+    if(debug){
+        return knex("tables")
+            .select("*")
+    }
+
     console.log("From List", table_id)
     if(table_id){
         return knex("tables")
