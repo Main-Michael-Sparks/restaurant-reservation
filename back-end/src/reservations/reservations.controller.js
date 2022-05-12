@@ -127,13 +127,14 @@ function validReserCloseDate(req,res,next){
     }
 
   const {reservation_date} = res.locals.reservation;
-  const reserDate = new Date(reservation_date)
+  const reserDate = new Date(reservation_date);
   if(reserDate.getDay() === 1){
     return next({ status:400, message:`reservation_date:${reservation_date} we are closed` })
   }
   console.log("REQUEST", req.originalUrl, req.body, req.method)
   console.log("reservation_date, tuesday Middleware", reservation_date)
   console.log("Day Object, tuesday MiddleWare", reserDate)
+  console.log("Day Object, tuesday MiddleWare", reserDate.getDate())
   console.log("/reservations MIDDLEWARE TuesDAY middlware:", res.locals.reservation)
   return next();
 }
@@ -250,6 +251,7 @@ async function list(req, res, _next) {
 
 async function create(req, res, _next){
     const newReservation = await service.create(res.locals.reservation);
+    console.log("Create function from DB:",newReservation, "Carry Over", res.locals.reservation)
     res.status(201).json({ data: newReservation })
 
 }
