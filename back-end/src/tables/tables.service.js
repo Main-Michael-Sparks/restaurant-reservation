@@ -40,7 +40,7 @@ function list(table_id, doubleCheck=null){
         console.log("From Double Check", table_id)
         return knex("tables")
             .select("*")
-            .where('table_name', 'ilike', `${table_id}%`)
+            .where('table_name', 'ilike', `%${table_id}`)
             .first();
     }
 
