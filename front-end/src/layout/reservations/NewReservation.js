@@ -4,6 +4,7 @@ import { createReservation } from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
 import { convertTime } from "../../utils/convertTime";
 import ReservationForm from "./ReservationForm";
+import  formatReservationDate  from "../../utils/format-reservation-date";
 
 function NewReservation(){
 
@@ -184,6 +185,7 @@ function NewReservation(){
         createReservation(dataToPost,abortController.signal)
             .then(resObj =>{
                 if(resObj.reservation_date){
+                    resObj = formatReservationDate(resObj);
                     const date = resObj.reservation_date;
                     setDataToPost(null);
                     history.push(`/dashboard?date=${date}`);

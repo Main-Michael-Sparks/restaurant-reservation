@@ -13,6 +13,7 @@ function create(newRes){
 function read( search, searchFor="" ) {
 
     if(searchFor === "date") {
+        console.log("search for date", search)
         return knex(resTable)
             .select("*")
             .where({ "reservation_date": search })
