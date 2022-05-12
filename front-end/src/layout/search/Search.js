@@ -3,6 +3,7 @@ import ReservationTable from "../../dashboard/ReservationTable";
 import { useEffect, useState } from "react";
 import { listReservations, updateReservation } from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
+import  formatReservationDate  from "../../utils/format-reservation-date";
 
 function Search() {
 
@@ -46,6 +47,7 @@ function Search() {
       setApiError(null);
       listReservations(dataToSend, abortController.signal)
         .then((data) => {
+          data = formatReservationDate(data)
           setCallApi(null);
           setReloadResTbls(null);
           setSrchReslt(data);

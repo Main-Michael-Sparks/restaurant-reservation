@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import { listTables, readReservation, seatTable } from "../../utils/api";
 import ErrorAlert from "../ErrorAlert.js";
+import  formatReservationDate  from "../../utils/format-reservation-date";
 
 function Seat() {
 
@@ -59,6 +60,7 @@ function Seat() {
     const abortController = new AbortController();
     readReservation(reservationId, abortController.signal)
       .then((resData) => {
+        resData = formatReservationDate(resData);
         return setReservation(resData);
       })
       .catch((error) => {

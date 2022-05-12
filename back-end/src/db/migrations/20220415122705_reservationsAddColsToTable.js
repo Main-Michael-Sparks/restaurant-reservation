@@ -9,7 +9,7 @@ exports.up = function(knex) {
             .notNullable();
         table.string("reservation_time")
             .notNullable();
-        table.string("reservation_date")
+        table.date("reservation_date")
             .notNullable();
         table.integer("people")
             .unsigned()

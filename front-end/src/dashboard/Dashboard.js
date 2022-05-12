@@ -5,6 +5,7 @@ import useQuery from "../utils/useQuery";
 import ReservationTable from "./ReservationTable";
 import TablesTable from "./TablesTable";
 import { next, today, previous } from "../utils/date-time";
+import  formatReservationDate  from "../utils/format-reservation-date"
 
 /**
  * Defines the dashboard page.
@@ -63,6 +64,7 @@ function Dashboard({ date }) {
     setApiError(null);
     listReservations(dateObj, abortController.signal)
       .then((data) => {
+        data = formatReservationDate(data)
         setReservations(
           data.filter((res) => res.status === "booked" || res.status === "seated")
         );
