@@ -59,8 +59,7 @@ function validReser(req, res, next) {
           errorObj.message = ` reservation status: ${res.locals.reservation.status} cannot be seated or finished`;
           return next(errorObj)
         }
-        console.log("/reservations MIDDLEWARE 1:", res.locals.reservation)
-        console.log("REQUEST", req.originalUrl, req.body)
+
    return next()
 }
 
@@ -132,11 +131,7 @@ function validReserCloseDate(req,res,next){
   if(reserDate.getDay() === 2){
     return next({ status:400, message:`reservation_date:${reservation_date} we are closed` })
   }
-  console.log("REQUEST", req.originalUrl, req.body, req.method)
-  console.log("reservation_date, tuesday Middleware", reservation_date)
-  console.log("Day Object, tuesday MiddleWare", reserDate)
-  console.log("Day Object, tuesday MiddleWare", reserDate.getDay())
-  console.log("/reservations MIDDLEWARE TuesDAY middlware:", res.locals.reservation)
+
   return next();
 }
 
@@ -252,7 +247,6 @@ async function list(req, res, _next) {
 
 async function create(req, res, _next){
     const newReservation = await service.create(res.locals.reservation);
-    console.log("Create function from DB:",newReservation, "Carry Over", res.locals.reservation)
     res.status(201).json({ data: newReservation })
 
 }
