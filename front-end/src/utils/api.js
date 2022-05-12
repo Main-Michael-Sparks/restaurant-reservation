@@ -134,7 +134,6 @@ export async function seatTable(tableId,data,signal){
     body: JSON.stringify({ data }),
     signal
   };
-  console.log("from seat table API frontend:", url, payload)
   return await fetchJson(url,payload,[]);
 };
 
@@ -145,7 +144,6 @@ export async function delTblSeat(tableId, signal){
     headers,
     signal
   };
-  console.log("Delete Table API front end:", url, payload)
   return await fetchJson(url,payload,[])
 };
 

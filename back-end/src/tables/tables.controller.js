@@ -107,15 +107,10 @@ async function validTableSeat(req, res, next){
 
 // Checks table id to see if table exists. 
 async function validTable(req, res, next){
-    console.log("request:", req.originalUrl, req.body)
-    //const test = await service.list(0,true);
-   // console.log("MIDDLEWARE 1: ALL TABLES THAT EXIST", test)
     res.locals.table_id = req.params.table_id;
     const table = await service.list(res.locals.table_id)
-    console.log("BACKEND from validTable 1st Middleware in chain", table, res.locals.table_id)
    if(!table) {
         res.locals.secondPass = await service.list(res.locals.table_id,true)
-        console.log("SecondPassTest",res.locals.secondPass )
         if(res.locals.secondPass){
             res.locals.jest = true
             return next();
@@ -134,13 +129,12 @@ async function validTable(req, res, next){
 // Checks table for occupied.
 async function isTblOcc(req, res, next){
 
-    // jus' jesting. 
+    // jest table_id spam fix 
    if(res.locals.jest){
         res.locals.table_id = res.locals.secondPass.table_id;
     };
 
     const isOccupied = await service.read(res.locals);
-    console.log("Second middlware in DELETE chain", isOccupied)
     if(!isOccupied) {
         return next({
             status: 400,
@@ -168,7 +162,6 @@ async function create(req, res, next){
 
 async function distroy(req, res, next){
     const data = await service.destory(res.locals.table_id)
-    console.log("Destroy function in Delete Chain", data)
     res.status(200).json({ data })
 };
 

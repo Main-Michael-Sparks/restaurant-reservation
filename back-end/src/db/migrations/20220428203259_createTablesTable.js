@@ -11,11 +11,6 @@ exports.up = function(knex) {
 
 // Drop the table's table on roll back. 
 exports.down = function(knex) {
-
     return knex.raw("TRUNCATE TABLE tables RESTART IDENTITY CASCADE")
-    .then(()=>knex.schema.dropTable("tables"));
-    /*return knex("tables").del().then(()=>knex.schema.dropTable("tables"))*/
-  /*  return  knex.schema.table("reservations", (table)=>{
-        table.dropColumn("table_id");
-    }).then(()=>knex.schema.dropTable("tables")) */
+        .then(()=>knex.schema.dropTable("tables"));
 };
