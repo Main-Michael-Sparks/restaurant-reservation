@@ -59,6 +59,7 @@ function validReser(req, res, next) {
           errorObj.message = ` reservation status: ${res.locals.reservation.status} cannot be seated or finished`;
           return next(errorObj)
         }
+
    return next()
 }
 
@@ -125,10 +126,12 @@ function validReserCloseDate(req,res,next){
     }
 
   const {reservation_date} = res.locals.reservation;
-  const reserDate = new Date(reservation_date)
-  if(reserDate.getDay() === 1){
+  const formateDate = reservation_date.split("-")
+  const reserDate = new Date(formateDate[0],formateDate[1]-1,formateDate[2]);
+  if(reserDate.getDay() === 2){
     return next({ status:400, message:`reservation_date:${reservation_date} we are closed` })
   }
+
   return next();
 }
 
