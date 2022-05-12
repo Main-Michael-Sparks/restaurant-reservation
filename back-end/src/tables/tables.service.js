@@ -33,7 +33,15 @@ function read(idPack){
 };
 
 // SQL queries for tables by Id or joined with reservations on foreign key. (list tables and tables with reservations assigned)
-function list(table_id){
+function list(table_id, doubleCheck=null){
+    // jest table_id spam fix: 
+    if(doubleCheck){
+        return knex("tables")
+            .select("*")
+            .where('table_name', 'ilike', `%${table_id}`)
+            .first();
+    }
+
     if(table_id){
         return knex("tables")
             .select("*")

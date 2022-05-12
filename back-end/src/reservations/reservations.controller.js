@@ -103,7 +103,6 @@ function vaildReserFuture(req, res, next){
   if(req.params.reservationId && 
     (req.path.split("/").length === 3) && 
     req.method === "PUT"){
-      console.log("status check passthrough successful: validReserFuture")
       return next()
   }
   const {reservation_date} = res.locals.reservation;

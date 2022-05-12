@@ -91,7 +91,7 @@ function Dashboard({ date }) {
       const abortController = new AbortController();
       setApiError(null);
       delTblSeat(tableFinishId, abortController.signal)
-        .then(() => {
+        .then((returnVal) => {
           setCallDelApi(null);
           setTableFinishId(null);
           setReloadResTbls(true);
