@@ -115,6 +115,7 @@ async function validTable(req, res, next){
     console.log("BACKEND from validTable 1st Middleware in chain", table, res.locals.table_id)
    if(!table) {
         res.locals.secondPass = await service.list(res.locals.table_id,true)
+        console.log("SecondPassTest",res.locals.secondPass )
         if(res.locals.secondPass){
             res.locals.jest = true
             return next();
