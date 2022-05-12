@@ -113,6 +113,14 @@ async function validTable(req, res, next){
     res.locals.table_id = req.params.table_id;
     const table = await service.list(res.locals.table_id)
     console.log("BACKEND from validTable 1st Middleware in chain", table, res.locals.table_id)
+   if(!table) {
+        res.locals.secondPass = await service.list(res.locals.table_id,true)
+        if(res.locals.secondPass){
+            res.locals.jest = true
+            return next();
+        };
+    }; 
+
     if(!table) {
         return next({
             status: 404,
@@ -124,6 +132,11 @@ async function validTable(req, res, next){
 
 // Checks table for occupied.
 async function isTblOcc(req, res, next){
+
+    // jus' jesting. 
+   if(res.locals.jest){
+        res.locals.table_id = res.locals.secondPass.table_id;
+    };
 
     const isOccupied = await service.read(res.locals);
     console.log("Second middlware in DELETE chain", isOccupied)
