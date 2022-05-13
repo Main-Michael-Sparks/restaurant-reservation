@@ -3,7 +3,8 @@ import ReservationTable from "../../dashboard/ReservationTable";
 import { useEffect, useState } from "react";
 import { listReservations, updateReservation } from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
-import  formatReservationDate  from "../../utils/format-reservation-date";
+import formatReservationDate  from "../../utils/format-reservation-date";
+import formatReservationTime from "../../utils/format-reservation-time";
 
 function Search() {
 
@@ -46,8 +47,9 @@ function Search() {
       const abortController = new AbortController();
       setApiError(null);
       listReservations(dataToSend, abortController.signal)
+        .then(formatReservationTime)
+        .then(formatReservationDate)
         .then((data) => {
-          data = formatReservationDate(data)
           setCallApi(null);
           setReloadResTbls(null);
           setSrchReslt(data);

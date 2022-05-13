@@ -5,9 +5,9 @@ exports.up = function(knex) {
             .notNullable();
         table.string("last_name")
             .notNullable();
-        table.string("mobile_number")
+        table.string("mobile_number", 14)
             .notNullable();
-        table.string("reservation_time")
+        table.time("reservation_time")
             .notNullable();
         table.date("reservation_date")
             .notNullable();
