@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import { listTables, readReservation, seatTable } from "../../utils/api";
 import ErrorAlert from "../ErrorAlert.js";
-import  formatReservationDate  from "../../utils/format-reservation-date";
+import formatReservationDate  from "../../utils/format-reservation-date";
+import formatReservationTime from "../../utils/format-reservation-time";
 
 function Seat() {
 
@@ -59,6 +60,8 @@ function Seat() {
   function loadReservation() {
     const abortController = new AbortController();
     readReservation(reservationId, abortController.signal)
+    // .then(fomatReservationTime)
+    // .then(formatReservationDate)
       .then((resData) => {
         resData = formatReservationDate(resData);
         return setReservation(resData);

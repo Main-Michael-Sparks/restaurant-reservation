@@ -3,7 +3,8 @@ import ReservationForm from "./ReservationForm";
 import ErrorAlert from "../ErrorAlert";
 import { useHistory, useParams } from "react-router";
 import { readReservation, updateReservation } from "../../utils/api";
-import  formatReservationDate  from "../../utils/format-reservation-date";
+import formatReservationDate  from "../../utils/format-reservation-date";
+import formatReservationTime from "../../utils/format-reservation-time";
 
 function EditReservation() {
 
@@ -30,8 +31,9 @@ function EditReservation() {
     const abortController = new AbortController();
     setApiErrors(null);
     readReservation(reservationId, abortController.signal)
+      .then(formatReservationTime)
+      .then(formatReservationDate)
       .then((data)=>{
-        data = formatReservationDate(data)
         setFormData(data)
       })
       .catch((error) => setApiErrors([error]));
