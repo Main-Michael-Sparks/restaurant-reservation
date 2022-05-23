@@ -1,6 +1,5 @@
 
-======
-# restaurant-reservation: A full-stack application for Thinkful's Software Engineering immersion program. 
+# restaurant-reservation: full-stack application for Thinkful's Software Engineering immersion program. 
 ======
 
 *A deployed demo can be found here: https://ms-rest-client.herokuapp.com/dashboard
@@ -18,7 +17,6 @@ Reservations are stored in a PostgreSQL database with a one-to-many relationship
 
 *Below is a quick overview of the project requirements and pre-existing files included with the project. 
 
-=======
 # Capstone: Restaurant Reservation System
 =======
 
